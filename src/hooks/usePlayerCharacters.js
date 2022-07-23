@@ -11,6 +11,7 @@ const usePlayerCharacters = () => {
   const [playerCharacters, setPlayerCharacters] = useState([]);
   const { activeSystem } = useSelector((state) => state.gameSystems);
   const { activeCharacter } = useSelector((state) => state.playerCharacter);
+  const { isPlayerLoggedInAsGm } = useSelector((state) => state.gameMaster);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -35,6 +36,12 @@ const usePlayerCharacters = () => {
       dispatch(resetActiveCharacter());
     }
   }, [activeSystem, dispatch]);
+
+  useEffect(() => {
+    if (isPlayerLoggedInAsGm) {
+      dispatch(resetActiveCharacter());
+    }
+  }, [isPlayerLoggedInAsGm, dispatch]);
 
   const onCharacterSelect = (character) => {
     if (

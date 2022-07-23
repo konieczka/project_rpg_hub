@@ -1,4 +1,5 @@
 import { HeadingLarge } from "components/Heading";
+import useGameMaster from "hooks/useGameMaster";
 import useGameSystems from "hooks/useGameSystems";
 import usePlayerCharacters from "hooks/usePlayerCharacters";
 import {
@@ -10,10 +11,10 @@ import {
 } from "./styles";
 
 const GameSystemsDashboard = () => {
-  const { gameSystems, activeSystem, onSystemSelect, isSystemSelected } =
-    useGameSystems();
+  const { gameSystems, activeSystem, onSystemSelect } = useGameSystems();
   const { playerCharacters, activeCharacter, onCharacterSelect } =
     usePlayerCharacters();
+  const { isPlayerLoggedInAsGm, onSelectGameMasterStatus } = useGameMaster();
 
   console.log("systems", activeSystem, playerCharacters);
 
@@ -42,28 +43,47 @@ const GameSystemsDashboard = () => {
         </ListWrapper>
       </SectionContainer>
       <SectionContainer>
-        <HeadingLarge>Wybierz postać</HeadingLarge>
-        <ListWrapper>
-          {playerCharacters.length
-            ? playerCharacters.map((character) => (
-                <ListItem
-                  key={character.characterId}
-                  isPlayerCharacter
-                  onClick={() => onCharacterSelect(character)}
-                  isSelected={
-                    activeCharacter &&
-                    activeCharacter.characterId === character.characterId
-                  }
-                >
-                  <img src={character.portraitUrl} alt={character.name} />
-                  <ItemDetails>
-                    <h1>{character.name}</h1>
-                    <p>{character.bio}</p>
-                  </ItemDetails>
-                </ListItem>
-              ))
-            : "Brak postaci w tym systemie."}
-        </ListWrapper>
+        {activeSystem && (
+          <>
+            <HeadingLarge>Wybierz postać</HeadingLarge>
+            <ListWrapper>
+              {playerCharacters.length
+                ? playerCharacters.map((character) => (
+                    <ListItem
+                      key={character.characterId}
+                      isPlayerCharacter
+                      onClick={() => onCharacterSelect(character)}
+                      isSelected={
+                        activeCharacter &&
+                        activeCharacter.characterId === character.characterId
+                      }
+                    >
+                      <img src={character.portraitUrl} alt={character.name} />
+                      <ItemDetails>
+                        <h1>{character.name}</h1>
+                        <p>{character.bio}</p>
+                      </ItemDetails>
+                    </ListItem>
+                  ))
+                : "Brak postaci w tym systemie."}
+              <ListItem>
+                <ItemDetails>
+                  <h1>+&nbsp;&nbsp;&nbsp;Stwórz nową postać</h1>
+                </ItemDetails>
+              </ListItem>
+              <ListItem
+                key="log-in-as-gm"
+                isPlayerCharacter
+                onClick={onSelectGameMasterStatus}
+                isSelected={isPlayerLoggedInAsGm}
+              >
+                <ItemDetails>
+                  <h1>Wejdź jako Mistrz Gry</h1>
+                </ItemDetails>
+              </ListItem>
+            </ListWrapper>
+          </>
+        )}
       </SectionContainer>
     </Container>
   );
