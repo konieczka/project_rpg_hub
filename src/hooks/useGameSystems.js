@@ -6,7 +6,9 @@ import { setActiveSystem, resetActiveSystem } from "redux/gameSystemReducer";
 
 const useGameSystems = () => {
   const [gameSystems, setGameSystems] = useState([]);
-  const { activeSystem } = useSelector((state) => state.gameSystems);
+  const { activeSystem, isSystemSelected } = useSelector(
+    (state) => state.gameSystems
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -29,7 +31,7 @@ const useGameSystems = () => {
     }
   };
 
-  return { gameSystems, activeSystem, onSystemSelect };
+  return { gameSystems, activeSystem, onSystemSelect, isSystemSelected };
 };
 
 export default useGameSystems;

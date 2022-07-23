@@ -15,14 +15,14 @@ export const SectionContainer = styled.div`
   padding: 48px;
 `;
 
-export const SystemsListWrapper = styled.div`
+export const ListWrapper = styled.div`
   display: flex;
   flex-flow: column nowrap;
   gap: 16px;
   margin-top: 32px;
 `;
 
-export const SystemsListItem = styled.div`
+export const ListItem = styled.div`
   display: flex;
   flex-flow: row nowrap;
   gap: 16px;
@@ -47,9 +47,17 @@ export const SystemsListItem = styled.div`
     css`
       background: rgba(255, 255, 255, 0.15);
     `}
+
+  ${({ isPlayerCharacter }) =>
+    isPlayerCharacter &&
+    css`
+      img {
+        border-radius: 5px;
+      }
+    `}
 `;
 
-export const SystemDetails = styled.div`
+export const ItemDetails = styled.div`
   display: flex;
   flex-flow: column nowrap;
   gap: 8px;
