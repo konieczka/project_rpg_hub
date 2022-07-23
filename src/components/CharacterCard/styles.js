@@ -17,3 +17,8 @@ export const Container = styled.div`
       border-color: ${mainColor};
     `}
 `;
+
+export const DoubleColumnLayout = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+`;

@@ -1,7 +1,9 @@
-import { Container } from "./styles";
+import { Container, DoubleColumnLayout } from "./styles";
 import { useSelector } from "react-redux";
 import { ExperienceStatus } from "./micromodules/ExperienceStatus";
 import { CharacterPortrait } from "./micromodules/CharacterPortrait";
+import { StatusBox } from "./micromodules/StatusBox";
+import { EqStatusBox } from "./micromodules/EqStatusBox";
 
 const CharacterCard = ({ mainColor }) => {
   const { activeCharacter } = useSelector((state) => state.playerCharacter);
@@ -18,6 +20,14 @@ const CharacterCard = ({ mainColor }) => {
           portraitUrl={activeCharacter.portraitUrl}
         />
       )}
+      <DoubleColumnLayout>
+        {activeCharacter.baseStatus && (
+          <StatusBox {...activeCharacter.baseStatus} />
+        )}
+        {activeCharacter.eqStatus && (
+          <EqStatusBox {...activeCharacter.eqStatus} />
+        )}
+      </DoubleColumnLayout>
     </Container>
   );
 };
