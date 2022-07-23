@@ -1,3 +1,4 @@
+import CentralSection from "components/CentralSection";
 import SessionSelect from "components/SessionSelect";
 import useSystemMetadata from "hooks/useSystemMetadata";
 import { Container } from "./styles";
@@ -9,6 +10,7 @@ const MainGameView = () => {
   return (
     <Container backgroundUrl={backgroundUrl}>
       <SessionSelect />
+      <CentralSection />
     </Container>
   );
 };

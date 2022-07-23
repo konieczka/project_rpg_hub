@@ -11,12 +11,14 @@ import {
   ListItem,
   ListWrapper,
 } from "./styles";
+import useCharactersClasses from "hooks/useCharacterClasses";
 
 const GameSystemsDashboard = () => {
   const { gameSystems, activeSystem, onSystemSelect } = useGameSystems();
   const { playerCharacters, activeCharacter, onCharacterSelect } =
     usePlayerCharacters();
   const { isPlayerLoggedInAsGm, onSelectGameMasterStatus } = useGameMaster();
+  useCharactersClasses();
 
   const navigate = useNavigate();
 

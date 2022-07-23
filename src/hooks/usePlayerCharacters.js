@@ -25,8 +25,6 @@ const usePlayerCharacters = () => {
       let convertedRes = [];
       res.forEach((doc) => convertedRes.push(doc.data()));
 
-      console.log("converted res", res, activeSystem);
-
       setPlayerCharacters(convertedRes);
     };
 
