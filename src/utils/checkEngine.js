@@ -8,37 +8,37 @@ export const LOGICAL_OPERATORS = {
 export const DICES = {
   d4: {
     symbol: "d4",
-    range: 4,
+    range: 5,
     type: "number",
     isDice: true,
   },
   d6: {
     symbol: "d6",
-    range: 6,
+    range: 7,
     type: "number",
     isDice: true,
   },
   d8: {
     symbol: "d8",
-    range: 8,
+    range: 9,
     type: "number",
     isDice: true,
   },
   d10: {
     symbol: "d10",
-    range: 10,
+    range: 11,
     type: "number",
     isDice: true,
   },
   d12: {
     symbol: "d12",
-    range: 12,
+    range: 13,
     type: "number",
     isDice: true,
   },
   d20: {
     symbol: "d20",
-    range: 20,
+    range: 21,
     type: "number",
     isDice: true,
   },

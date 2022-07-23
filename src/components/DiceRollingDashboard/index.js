@@ -30,6 +30,7 @@ const DiceRollingDashboard = ({ mainColor, primaryColor, secondaryColor }) => {
   const [isInDraftMode, setIsInDraftMode] = useState(false);
   const [testNotation, setTestNotation] = useState([]);
   const [numericInputValue, setNumericInputValue] = useState(0);
+  const [previousTests, setPreviousTests] = useState([]);
 
   const toggleDraftMode = () => setIsInDraftMode((prev) => !prev);
 
@@ -50,6 +51,19 @@ const DiceRollingDashboard = ({ mainColor, primaryColor, secondaryColor }) => {
       ) {
         setTestNotation((prev) => [...prev, el]);
       }
+    }
+  };
+
+  const submitTest = () => {
+    if (isInDraftMode && testNotation.length) {
+      setPreviousTests((prev) => [...prev, testNotation]);
+
+      if (previousTests.length >= 2) {
+        previousTests.shift();
+      }
+
+      console.log(calculateNotation(testNotation));
+      resetTest();
     }
   };
 
@@ -148,12 +162,23 @@ const DiceRollingDashboard = ({ mainColor, primaryColor, secondaryColor }) => {
       <Row>
         <Column>
           <InlineLabel>Poprzednie testy</InlineLabel>
-          <PreviousCheck>
-            {"STR + D6"} <RerunCheckButton>⟲</RerunCheckButton>
-          </PreviousCheck>
-          <PreviousCheck>
-            {"STR + D6"} <RerunCheckButton>⟲</RerunCheckButton>
-          </PreviousCheck>
+          {previousTests.length ? (
+            previousTests.map((previous) => (
+              <PreviousCheck>
+                {getCheckNotation(previous)}
+                <RerunCheckButton
+                  onClick={() => {
+                    setIsInDraftMode(true);
+                    setTestNotation(previous);
+                  }}
+                >
+                  ⟲
+                </RerunCheckButton>
+              </PreviousCheck>
+            ))
+          ) : (
+            <PreviousCheck>Brak zapisanych w pamięci testów</PreviousCheck>
+          )}
         </Column>
         <NotationResult>
           {!isInDraftMode && "Tryb tworzenia testu wyłączony"}
@@ -165,7 +190,7 @@ const DiceRollingDashboard = ({ mainColor, primaryColor, secondaryColor }) => {
         <Button
           bgColor={primaryColor}
           isDisabled={!isInDraftMode || !testNotation.length}
-          onClick={() => console.log(calculateNotation(testNotation))}
+          onClick={submitTest}
         >
           SPRAWDŹ
         </Button>

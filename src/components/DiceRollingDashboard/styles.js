@@ -39,6 +39,7 @@ export const DiceButton = styled.div`
   cursor: pointer;
   user-select: none;
   border-radius: 5px;
+  transition-duration: 200ms;
 
   &:hover {
     background: rgba(255, 255, 255, 0.5);
@@ -61,6 +62,7 @@ export const OperationalButton = styled.div`
   border-radius: 5px;
   color: white;
   font-weight: 600;
+  transition-duration: 200ms;
 
   &:hover {
     background: rgba(255, 255, 255, 0.5);
@@ -89,7 +91,6 @@ export const PreviousCheck = styled.div`
   flex-flow: row nowrap;
   align-items: center;
   margin-bottom: -12px;
-  cursor: pointer;
 `;
 
 export const RerunCheckButton = styled.div`
@@ -99,6 +100,7 @@ export const RerunCheckButton = styled.div`
   user-select: none;
   margin-left: 4px;
   padding: 4px;
+  transition-duration: 200ms;
 
   &:hover {
     color: rgba(255, 255, 255, 0.75);
