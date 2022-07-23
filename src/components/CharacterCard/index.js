@@ -1,36 +1,44 @@
-import { Container, DoubleColumnLayout } from "./styles";
 import { useSelector } from "react-redux";
 import { ExperienceStatus } from "./micromodules/ExperienceStatus";
 import { CharacterPortrait } from "./micromodules/CharacterPortrait";
 import { StatusBox } from "./micromodules/StatusBox";
 import { EqStatusBox } from "./micromodules/EqStatusBox";
 import { AttributesBox } from "./micromodules/AttributesBox";
+import { EffectsBox } from "./micromodules/EffectsBox";
+import { Container, DoubleColumnLayout, Wrapper } from "./styles";
 
 const CharacterCard = ({ mainColor }) => {
   const { activeCharacter } = useSelector((state) => state.playerCharacter);
   return (
-    <Container mainColor={mainColor}>
-      {activeCharacter.expBar && (
-        <ExperienceStatus {...activeCharacter.expBar} />
+    <Wrapper>
+      {activeCharacter.effects && activeCharacter.effects.length && (
+        <EffectsBox effects={activeCharacter.effects} />
       )}
-      {activeCharacter.portraitUrl && (
-        <CharacterPortrait
-          name={activeCharacter.name}
-          typeId={activeCharacter.typeId}
-          classId={activeCharacter.classId}
-          portraitUrl={activeCharacter.portraitUrl}
-        />
-      )}
-      <DoubleColumnLayout>
-        {activeCharacter.baseStatus && (
-          <StatusBox {...activeCharacter.baseStatus} />
+      <Container mainColor={mainColor}>
+        {activeCharacter.expBar && (
+          <ExperienceStatus {...activeCharacter.expBar} />
         )}
-        {activeCharacter.eqStatus && (
-          <EqStatusBox {...activeCharacter.eqStatus} />
+        {activeCharacter.portraitUrl && (
+          <CharacterPortrait
+            name={activeCharacter.name}
+            typeId={activeCharacter.typeId}
+            classId={activeCharacter.classId}
+            portraitUrl={activeCharacter.portraitUrl}
+          />
         )}
-      </DoubleColumnLayout>
-      {activeCharacter.attrs && <AttributesBox attrs={activeCharacter.attrs} />}
-    </Container>
+        <DoubleColumnLayout>
+          {activeCharacter.baseStatus && (
+            <StatusBox {...activeCharacter.baseStatus} />
+          )}
+          {activeCharacter.eqStatus && (
+            <EqStatusBox {...activeCharacter.eqStatus} />
+          )}
+        </DoubleColumnLayout>
+        {activeCharacter.attrs && (
+          <AttributesBox attrs={activeCharacter.attrs} />
+        )}
+      </Container>
+    </Wrapper>
   );
 };
 

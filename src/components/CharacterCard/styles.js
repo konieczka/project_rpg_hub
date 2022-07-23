@@ -22,3 +22,8 @@ export const DoubleColumnLayout = styled.div`
   display: flex;
   flex-flow: row nowrap;
 `;
+
+export const Wrapper = styled.div`
+  display: flex;
+  flex-flow: column nowrap;
+`;

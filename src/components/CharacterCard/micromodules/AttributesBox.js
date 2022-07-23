@@ -21,7 +21,7 @@ export const AttributesBox = ({ attrs }) => {
   return (
     <Container>
       {displayAttributes.map((displayAttr) => (
-        <AttributeItem>
+        <AttributeItem key={`${displayAttr.identifier}-character-attribute`}>
           <AttributeKey>{displayAttr.identifier}</AttributeKey>
           <AttributeValue>{displayAttr.value}</AttributeValue>
         </AttributeItem>
