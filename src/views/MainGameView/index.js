@@ -1,5 +1,5 @@
-import CentralSection from "components/CentralSection";
-import SessionSelect from "components/SessionSelect";
+import CentralSection from "components/shared/CentralSection";
+import SessionSelect from "components/shared/SessionSelect";
 import useSystemMetadata from "hooks/useSystemMetadata";
 import { Container } from "./styles";
 

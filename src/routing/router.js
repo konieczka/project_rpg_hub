@@ -1,17 +1,26 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import GameSystemsDashboard from "views/GameSystemsDashboard";
+import SystemSelectionDashboard from "views/SystemSelectionDashboard";
 import MainGameView from "views/MainGameView";
+import CharacterCreationScreen from "views/CharacterCreationScreen";
 
 export const ROUTES = {
-  mainDashboard: "/",
+  systemSelectionDashboard: "/",
   mainGameView: "/ingame",
+  characterCreation: "/character-creator",
 };
 
 const Router = ({ user }) => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={ROUTES.mainDashboard} element={<GameSystemsDashboard />} />
+        <Route
+          path={ROUTES.systemSelectionDashboard}
+          element={<SystemSelectionDashboard />}
+        />
+        <Route
+          path={ROUTES.characterCreation}
+          element={<CharacterCreationScreen />}
+        />
         <Route path={ROUTES.mainGameView} element={<MainGameView />} />
       </Routes>
     </BrowserRouter>

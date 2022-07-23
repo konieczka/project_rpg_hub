@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "components/Button";
+import { Button } from "components/shared/Button";
 import { ReactComponent as D4Icon } from "assets/d4icon.svg";
 import { ReactComponent as D6Icon } from "assets/d6icon.svg";
 import { ReactComponent as D8Icon } from "assets/d8icon.svg";

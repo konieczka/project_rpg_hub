@@ -1,6 +1,6 @@
-import CharacterCard from "components/CharacterCard";
-import DiceRollingDashboard from "components/DiceRollingDashboard";
-import MessageBox from "components/MessageBox";
+import CharacterCard from "components/shared/CharacterCard";
+import DiceRollingDashboard from "components/shared/DiceRollingDashboard";
+import MessageBox from "components/shared/MessageBox";
 import { Container, Row } from "./styles";
 
 const PlayerGameplayPanel = ({ mainColor, primaryColor, secondaryColor }) => {

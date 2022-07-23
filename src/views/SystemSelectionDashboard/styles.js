@@ -18,6 +18,8 @@ export const SectionContainer = styled.div`
 export const ListWrapper = styled.div`
   display: flex;
   flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
   gap: 16px;
   margin-top: 32px;
 `;

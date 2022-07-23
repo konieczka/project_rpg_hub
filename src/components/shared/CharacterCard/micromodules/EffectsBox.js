@@ -1,6 +1,6 @@
 import { ReactComponent as BuffIcon } from "assets/buffIcon.svg";
 import { ReactComponent as DebuffIcon } from "assets/debuffIcon.svg";
-import Tooltip from "components/Tooltip";
+import Tooltip from "components/shared/Tooltip";
 import { Container, EffectItem, TooltipBody } from "./EffectsBox.styles";
 
 const determineIfEffectIsDebuff = (effect) => {

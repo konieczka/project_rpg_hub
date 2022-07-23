@@ -2,8 +2,8 @@ import { useState } from "react";
 import useSystemMetadata from "hooks/useSystemMetadata";
 import useSessions from "hooks/useSessions";
 import { useNavigate } from "react-router";
-import { DropdownArrowRegular } from "components/DropdownArrow";
-import { InlineTextButton } from "components/InlineTextButton";
+import { DropdownArrowRegular } from "components/shared/DropdownArrow";
+import { InlineTextButton } from "components/shared/InlineTextButton";
 import { ROUTES } from "routing/router";
 import {
   DropdownBody,
@@ -45,7 +45,7 @@ const SessionSelect = () => {
         <InlineTextButton customSize="16px">+&nbsp;Nowa sesja</InlineTextButton>
         <InlineTextButton
           customSize="24px"
-          onClick={() => navigate(ROUTES.mainDashboard)}
+          onClick={() => navigate(ROUTES.systemSelectionDashboard)}
         >
           ZMIEŃ SYSTEM
         </InlineTextButton>

@@ -1,4 +1,5 @@
-import { HeadingLarge } from "components/Heading";
+import { HeadingLarge } from "components/shared/Heading";
+import { Button } from "components/shared/Button";
 import { useNavigate } from "react-router";
 import useGameMaster from "hooks/useGameMaster";
 import useGameSystems from "hooks/useGameSystems";
@@ -13,7 +14,7 @@ import {
 } from "./styles";
 import useCharactersClasses from "hooks/useCharacterClasses";
 
-const GameSystemsDashboard = () => {
+const SystemSelectionDashboard = () => {
   const { gameSystems, activeSystem, onSystemSelect } = useGameSystems();
   const { playerCharacters, activeCharacter, onCharacterSelect } =
     usePlayerCharacters();
@@ -70,7 +71,7 @@ const GameSystemsDashboard = () => {
                     </ListItem>
                   ))
                 : "Brak postaci w tym systemie."}
-              <ListItem>
+              <ListItem onClick={() => navigate(ROUTES.characterCreation)}>
                 <ItemDetails>
                   <h1>+&nbsp;&nbsp;&nbsp;Stwórz nową postać</h1>
                 </ItemDetails>
@@ -85,10 +86,13 @@ const GameSystemsDashboard = () => {
                   <h1>Wejdź jako Mistrz Gry</h1>
                 </ItemDetails>
               </ListItem>
+              <Button
+                bgColor="blue"
+                onClick={() => navigate(ROUTES.mainGameView)}
+              >
+                Potwierdź
+              </Button>
             </ListWrapper>
-            <button onClick={() => navigate(ROUTES.mainGameView)}>
-              Potwierdź
-            </button>
           </>
         )}
       </SectionContainer>
@@ -96,4 +100,4 @@ const GameSystemsDashboard = () => {
   );
 };
 
-export default GameSystemsDashboard;
+export default SystemSelectionDashboard;
