@@ -5,7 +5,7 @@ export const Container = styled.div`
   flex-flow: column;
   justify-content: flex-end;
   height: 100%;
-  width: 50%;
+  width: 932px;
 
   background: rgba(0, 0, 0, 0.75);
   border: 2px solid white;
