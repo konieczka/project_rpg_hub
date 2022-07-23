@@ -1,10 +1,14 @@
+import CharacterCard from "components/CharacterCard";
 import DiceRollingDashboard from "components/DiceRollingDashboard";
 import MessageBox from "components/MessageBox";
-import { Container } from "./styles";
+import { Container, Row } from "./styles";
 
 const PlayerGameplayPanel = ({ mainColor, primaryColor, secondaryColor }) => {
   return (
     <Container>
+      <Row>
+        <CharacterCard mainColor={mainColor} />
+      </Row>
       <DiceRollingDashboard
         mainColor={mainColor}
         primaryColor={primaryColor}
