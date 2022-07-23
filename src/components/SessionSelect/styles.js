@@ -61,3 +61,19 @@ export const SessionsList = styled.div`
   flex-flow: column nowrap;
   margin-bottom: 48px;
 `;
+
+export const SessionListItem = styled.div`
+  color: rgba(255, 255, 255, 0.75);
+  user-select: none;
+  cursor: pointer;
+
+  &:hover {
+    color: white;
+  }
+
+  ${({ isSelected }) =>
+    isSelected &&
+    css`
+      color: ${isSelected};
+    `}
+`;
