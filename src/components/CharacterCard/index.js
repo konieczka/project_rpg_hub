@@ -4,6 +4,7 @@ import { ExperienceStatus } from "./micromodules/ExperienceStatus";
 import { CharacterPortrait } from "./micromodules/CharacterPortrait";
 import { StatusBox } from "./micromodules/StatusBox";
 import { EqStatusBox } from "./micromodules/EqStatusBox";
+import { AttributesBox } from "./micromodules/AttributesBox";
 
 const CharacterCard = ({ mainColor }) => {
   const { activeCharacter } = useSelector((state) => state.playerCharacter);
@@ -28,6 +29,7 @@ const CharacterCard = ({ mainColor }) => {
           <EqStatusBox {...activeCharacter.eqStatus} />
         )}
       </DoubleColumnLayout>
+      {activeCharacter.attrs && <AttributesBox attrs={activeCharacter.attrs} />}
     </Container>
   );
 };
