@@ -1,7 +1,9 @@
 import { HeadingLarge } from "components/Heading";
+import { useNavigate } from "react-router";
 import useGameMaster from "hooks/useGameMaster";
 import useGameSystems from "hooks/useGameSystems";
 import usePlayerCharacters from "hooks/usePlayerCharacters";
+import { ROUTES } from "routing/router";
 import {
   Container,
   SectionContainer,
@@ -16,7 +18,7 @@ const GameSystemsDashboard = () => {
     usePlayerCharacters();
   const { isPlayerLoggedInAsGm, onSelectGameMasterStatus } = useGameMaster();
 
-  console.log("systems", activeSystem, playerCharacters);
+  const navigate = useNavigate();
 
   return (
     <Container>
@@ -82,6 +84,9 @@ const GameSystemsDashboard = () => {
                 </ItemDetails>
               </ListItem>
             </ListWrapper>
+            <button onClick={() => navigate(ROUTES.mainGameView)}>
+              Potwierdź
+            </button>
           </>
         )}
       </SectionContainer>
