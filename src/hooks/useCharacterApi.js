@@ -81,6 +81,7 @@ const useCharacterApi = (characterId) => {
     );
   };
 
+  // GETTERS
   const getCharacterGeneralData = () => ({
     name: synchronizedState.name,
     bio: synchronizedState.bio,
@@ -108,12 +109,11 @@ const useCharacterApi = (characterId) => {
   const getCharacterExpBar = () => synchronizedState.expBar;
 
   const getCharacterEqStatus = () => {
-    // TODO: uwzględnić jeszcze modyfikatory z eq
+    var calculatedStatus = { ...synchronizedState.eqStatus };
     const characterEffects = getCharacterEffects();
+    const equippedItems = getEquippedItems();
 
     if (characterEffects) {
-      var calculatedStatus = { ...synchronizedState.eqStatus };
-
       characterEffects.forEach((effect) => {
         if (effect.baseModifiers) {
           calculatedStatus = {
@@ -124,7 +124,7 @@ const useCharacterApi = (characterId) => {
         }
       });
 
-      return {
+      calculatedStatus = {
         ...calculatedStatus,
         defDebuffStatus: determineDebuffStatus(
           synchronizedState.eqStatus.defPoints,
@@ -135,16 +135,43 @@ const useCharacterApi = (characterId) => {
           calculatedStatus.atkPoints
         ),
       };
-    } else return synchronizedState.eqStatus;
+    }
+
+    if (equippedItems) {
+      equippedItems.forEach(({ whenEquipped }) => {
+        if (whenEquipped.base) {
+          calculatedStatus = {
+            ...calculatedStatus,
+            atkPoints:
+              calculatedStatus.atkPoints + whenEquipped.base.atkModifier,
+            defPoints:
+              calculatedStatus.defPoints + whenEquipped.base.defModifier,
+          };
+        }
+      });
+
+      calculatedStatus = {
+        ...calculatedStatus,
+        defDebuffStatus: determineDebuffStatus(
+          synchronizedState.eqStatus.defPoints,
+          calculatedStatus.defPoints
+        ),
+        atkDebuffStatus: determineDebuffStatus(
+          synchronizedState.eqStatus.atkPoints,
+          calculatedStatus.atkPoints
+        ),
+      };
+    }
+
+    return calculatedStatus;
   };
 
   const getCharacterBaseStatus = () => {
-    // TODO: uwzględnić jeszcze modyfikatory z eq
+    var calculatedStatus = { ...synchronizedState.baseStatus };
     const characterEffects = getCharacterEffects();
+    const equippedItems = getEquippedItems();
 
     if (characterEffects) {
-      var calculatedStatus = { ...synchronizedState.baseStatus };
-
       characterEffects.forEach((effect) => {
         if (effect.baseModifiers) {
           calculatedStatus = {
@@ -157,7 +184,7 @@ const useCharacterApi = (characterId) => {
         }
       });
 
-      return {
+      calculatedStatus = {
         ...calculatedStatus,
         mpDebuffStatus: determineDebuffStatus(
           synchronizedState.baseStatus.mpPointsMax,
@@ -168,16 +195,42 @@ const useCharacterApi = (characterId) => {
           calculatedStatus.hpPointsMax
         ),
       };
-    } else return synchronizedState.baseStatus;
+    }
+
+    if (equippedItems) {
+      equippedItems.forEach(({ whenEquipped }) => {
+        if (whenEquipped.base) {
+          calculatedStatus = {
+            ...calculatedStatus,
+            hpPointsMax:
+              calculatedStatus.hpPointsMax + whenEquipped.base.hpModifier,
+            mpPointsMax:
+              calculatedStatus.mpPointsMax + whenEquipped.base.mpModifier,
+          };
+        }
+      });
+
+      calculatedStatus = {
+        ...calculatedStatus,
+        mpDebuffStatus: determineDebuffStatus(
+          synchronizedState.baseStatus.mpPointsMax,
+          calculatedStatus.mpPointsMax
+        ),
+        hpDebuffStatus: determineDebuffStatus(
+          synchronizedState.baseStatus.hpPointsMax,
+          calculatedStatus.hpPointsMax
+        ),
+      };
+    }
+    return calculatedStatus;
   };
 
   const getCharacterAttrs = () => {
-    // TODO: uwzględnić jeszcze modyfikatory z eq
+    var temp = { ...synchronizedState.attrs };
     const characterEffects = getCharacterEffects();
+    const equippedItems = getEquippedItems();
 
     if (characterEffects) {
-      var temp = { ...synchronizedState.attrs };
-
       characterEffects.forEach((effect) => {
         if (effect.attrsModifiers) {
           const modifiedAttrs = Object.keys(effect.attrsModifiers);
@@ -190,20 +243,30 @@ const useCharacterApi = (characterId) => {
           });
         }
       });
-
-      return Object.keys(temp).map((attrId) => ({
-        identifier: attrId,
-        value: temp[attrId],
-        debuffStatus: determineDebuffStatus(
-          synchronizedState.attrs[attrId],
-          temp[attrId]
-        ),
-      }));
     }
 
-    return Object.keys(synchronizedState.attrs).map((attrId) => ({
+    if (equippedItems) {
+      equippedItems.forEach(({ whenEquipped }) => {
+        if (whenEquipped.attrs) {
+          const modifiedAttrs = Object.keys(whenEquipped.attrs);
+
+          modifiedAttrs.forEach((attrId) => {
+            temp = {
+              ...temp,
+              [attrId]: temp[attrId] + whenEquipped.attrs[attrId],
+            };
+          });
+        }
+      });
+    }
+
+    return Object.keys(temp).map((attrId) => ({
       identifier: attrId,
-      value: synchronizedState.attrs[attrId],
+      value: temp[attrId],
+      debuffStatus: determineDebuffStatus(
+        synchronizedState.attrs[attrId],
+        temp[attrId]
+      ),
     }));
   };
 
@@ -214,6 +277,12 @@ const useCharacterApi = (characterId) => {
       isEquipped: synchronizedState.equippedItems.includes(item.itemId),
     }));
 
+  const getEquippedItems = () =>
+    synchronizedState.equippedItems.map(
+      (itemId) => activeSystemMetadata.inventory[itemId]
+    );
+
+  // SETTERS
   const handleEquippableItem = (itemId) => {
     if (synchronizedState.equippedItems.includes(itemId)) {
       const updatedData = {
@@ -232,6 +301,38 @@ const useCharacterApi = (characterId) => {
     }
   };
 
+  const handleConsumableItem = (itemId) => {
+    const { onUse } = activeSystemMetadata.inventory[itemId];
+
+    const newHp = synchronizedState.baseStatus.hpPoints + onUse.hpModifier;
+    const newMp = synchronizedState.baseStatus.mpPoints + onUse.mpModifier;
+    const { mpPointsMax, hpPointsMax } = getCharacterBaseStatus();
+
+    var updatedData = {
+      ...synchronizedState,
+      baseStatus: {
+        ...synchronizedState.baseStatus,
+        hpPoints: newHp > hpPointsMax ? hpPointsMax : newHp,
+        mpPoints: newMp > mpPointsMax ? mpPointsMax : newMp,
+      },
+      inventory: synchronizedState.inventory.flatMap((item) => {
+        const newItem = { ...item };
+
+        if (itemId === item.itemId) {
+          if (item.amount > 1) {
+            newItem.amount = item.amount - 1;
+          } else {
+            return [];
+          }
+        }
+
+        return newItem;
+      }),
+    };
+
+    sendUpdate(updatedData);
+  };
+
   return {
     characterMounted: !!synchronizedState.characterId,
     getCharacterGeneralData,
@@ -245,6 +346,7 @@ const useCharacterApi = (characterId) => {
     getCharacterAttrs,
     getCharacterInventory,
     handleEquippableItem,
+    handleConsumableItem,
   };
 };
 

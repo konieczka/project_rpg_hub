@@ -94,9 +94,7 @@ const PlayerInventoryPanel = () => {
           </ListContainer>
           {itemDetails && (
             <ItemDetailsBox>
-              <h3>
-                {itemDetails.itemData.name} ({itemDetails.amount})
-              </h3>
+              <h3>{itemDetails.itemData.name}</h3>
               <p>{itemDetails.itemData.description}</p>
               {itemDetails.itemData.whenEquipped && (
                 <ul>
@@ -166,7 +164,14 @@ const PlayerInventoryPanel = () => {
                   </Button>
                 )}
                 {itemDetails.itemData.onUse && (
-                  <Button bgColor={colors.primary}>Użyj</Button>
+                  <Button
+                    onClick={() =>
+                      activeCharacterApi.handleConsumableItem(selectedItemId)
+                    }
+                    bgColor={colors.primary}
+                  >
+                    Użyj
+                  </Button>
                 )}
               </ButtonsGroup>
             </ItemDetailsBox>
