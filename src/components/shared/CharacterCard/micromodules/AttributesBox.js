@@ -1,29 +1,26 @@
-import { useEffect, useState } from "react";
 import {
   AttributeItem,
   AttributeKey,
   AttributeValue,
   Container,
 } from "./AttributesBox.styles";
+import { DebuffIndicator } from "./StatusBox";
 
 export const AttributesBox = ({ attrs }) => {
-  const [displayAttributes, setDisplayAttributes] = useState([]);
-
-  useEffect(() => {
-    setDisplayAttributes(
-      Object.keys(attrs).map((attrId) => ({
-        identifier: attrId,
-        value: attrs[attrId],
-      }))
-    );
-  }, [attrs]);
-
   return (
     <Container>
-      {displayAttributes.map((displayAttr) => (
+      {attrs.map((displayAttr) => (
         <AttributeItem key={`${displayAttr.identifier}-character-attribute`}>
           <AttributeKey>{displayAttr.identifier}</AttributeKey>
-          <AttributeValue>{displayAttr.value}</AttributeValue>
+          <AttributeValue>
+            {displayAttr.value}
+            {displayAttr.debuffStatus && (
+              <>
+                &nbsp;
+                <DebuffIndicator debuffStatus={displayAttr.debuffStatus} />
+              </>
+            )}
+          </AttributeValue>
         </AttributeItem>
       ))}
     </Container>

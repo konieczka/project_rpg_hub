@@ -10,8 +10,6 @@ const MainGameView = () => {
   const { isActiveSystemMounted } = useActiveGameSystemApi();
   const { activeCharacter } = useSelector((state) => state.playerCharacter);
 
-  console.log("dupa", isActiveSystemMounted);
-
   if (!isActiveSystemMounted || !systemTheme) {
     return <div>Loading... </div>;
   }

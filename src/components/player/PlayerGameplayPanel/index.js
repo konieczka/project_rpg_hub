@@ -27,6 +27,7 @@ const PlayerGameplayPanel = ({ mainColor, primaryColor, secondaryColor }) => {
           characterExpBar={activeCharacterApi.getCharacterExpBar()}
           characterBaseStatus={activeCharacterApi.getCharacterBaseStatus()}
           characterEqStatus={activeCharacterApi.getCharacterEqStatus()}
+          characterAttrs={activeCharacterApi.getCharacterAttrs()}
         />
       </Row>
       <DiceRollingDashboard

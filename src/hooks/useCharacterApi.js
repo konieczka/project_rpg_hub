@@ -157,6 +157,42 @@ const useCharacterApi = (characterId) => {
     } else return synchronizedState.baseStatus;
   };
 
+  const getCharacterAttrs = () => {
+    // TODO: uwzględnić jeszcze modyfikatory z eq
+    const characterEffects = getCharacterEffects();
+
+    if (characterEffects) {
+      var temp = { ...synchronizedState.attrs };
+
+      characterEffects.forEach((effect) => {
+        if (effect.attrsModifiers) {
+          const modifiedAttrs = Object.keys(effect.attrsModifiers);
+
+          modifiedAttrs.forEach((attrId) => {
+            temp = {
+              ...temp,
+              [attrId]: temp[attrId] + effect.attrsModifiers[attrId],
+            };
+          });
+        }
+      });
+
+      return Object.keys(temp).map((attrId) => ({
+        identifier: attrId,
+        value: temp[attrId],
+        debuffStatus: determineDebuffStatus(
+          synchronizedState.attrs[attrId],
+          temp[attrId]
+        ),
+      }));
+    }
+
+    return Object.keys(synchronizedState.attrs).map((attrId) => ({
+      identifier: attrId,
+      value: synchronizedState.attrs[attrId],
+    }));
+  };
+
   return {
     characterMounted: !!synchronizedState.characterId,
     getCharacterGeneralData,
@@ -167,6 +203,7 @@ const useCharacterApi = (characterId) => {
     getCharacterBaseStatus,
     getCharacterExpBar,
     getCharacterEqStatus,
+    getCharacterAttrs,
   };
 };
 
