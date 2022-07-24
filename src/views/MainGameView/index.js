@@ -1,16 +1,18 @@
 import CentralSection from "components/shared/CentralSection";
 import SessionSelect from "components/shared/SessionSelect";
-import useActiveCharacterApi from "hooks/useActiveCharacterApi";
+import useCharacterApi from "hooks/useCharacterApi";
 import useActiveGameSystemApi from "hooks/useActiveGameSystemApi";
 import useSystemTheme from "hooks/useSystemTheme";
 import { Container } from "./styles";
+import { useSelector } from "react-redux";
 
 const MainGameView = () => {
   const systemTheme = useSystemTheme();
   const { isActiveSystemMounted } = useActiveGameSystemApi();
-  const characterApi = useActiveCharacterApi();
+  const { activeCharacter } = useSelector((state) => state.playerCharacter);
+  const activeCharacterApi = useCharacterApi(activeCharacter.characterId || "");
 
-  console.log(characterApi);
+  console.log(activeCharacterApi.getCharacterGeneralData());
 
   if (!isActiveSystemMounted || !systemTheme) {
     return <div>Loading... </div>;

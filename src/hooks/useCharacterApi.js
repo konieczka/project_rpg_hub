@@ -3,29 +3,39 @@ import { firestore } from "config/firebase";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { useState, useEffect } from "react";
 
-const useActiveCharacterApi = () => {
+const useCharacterApi = (characterId) => {
   const { activeSystem } = useSelector((state) => state.gameSystems);
-  const { activeCharacter } = useSelector((state) => state.playerCharacter);
   const dispatch = useDispatch();
 
-  const [synchronizedState, setSynchronizedState] = useState(null);
+  const [synchronizedState, setSynchronizedState] = useState({
+    name: "",
+    bio: "",
+    portraitUrl: "",
+    classId: "",
+    typeId: "",
+    effects: [],
+    perks: [],
+  });
+
+  console.log(characterId, synchronizedState);
 
   useEffect(() => {
-    if (activeCharacter && activeSystem) {
-      const unsub = onSnapshot(
+    var unsub = () => {};
+    if (activeSystem && characterId) {
+      unsub = onSnapshot(
         doc(
           firestore,
           "playerCharacters",
           activeSystem.systemId,
           "characters",
-          activeCharacter.characterId
+          characterId
         ),
         (res) => setSynchronizedState(res.data())
       );
-
-      return unsub();
     }
-  }, [activeCharacter, activeSystem, dispatch]);
+
+    return unsub();
+  }, [characterId, activeSystem, dispatch]);
 
   const getCharacterGeneralData = () => ({
     name: synchronizedState.name,
@@ -58,4 +68,4 @@ const useActiveCharacterApi = () => {
   };
 };
 
-export default useActiveCharacterApi;
+export default useCharacterApi;
