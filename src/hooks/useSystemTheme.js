@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-const useSystemVisuals = () => {
+const useSystemTheme = () => {
   const { activeSystem } = useSelector((state) => state.gameSystems);
 
   if (activeSystem) {
@@ -12,4 +12,4 @@ const useSystemVisuals = () => {
   return null;
 };
 
-export default useSystemVisuals;
+export default useSystemTheme;

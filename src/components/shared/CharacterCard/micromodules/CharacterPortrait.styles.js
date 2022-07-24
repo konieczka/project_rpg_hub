@@ -24,7 +24,7 @@ export const CharacterDetailsSection = styled.div`
   h1,
   h2,
   h3 {
-    filter: drop-shadow(2px 2px 1px black);
+    text-shadow: -2px -2px 1px #000, 2px -2px 1px #000, -2px 2px 1px #000, 2px 2px 2px #000;
   }
 
   h1 {

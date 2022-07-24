@@ -193,6 +193,13 @@ const useCharacterApi = (characterId) => {
     }));
   };
 
+  const getCharacterInventory = () =>
+    synchronizedState.inventory.map((item) => ({
+      ...item,
+      itemData: activeSystemMetadata.inventory[item.itemId],
+      isEquipped: synchronizedState.equippedItems.includes(item.itemId),
+    }));
+
   return {
     characterMounted: !!synchronizedState.characterId,
     getCharacterGeneralData,
@@ -204,6 +211,7 @@ const useCharacterApi = (characterId) => {
     getCharacterExpBar,
     getCharacterEqStatus,
     getCharacterAttrs,
+    getCharacterInventory,
   };
 };
 
