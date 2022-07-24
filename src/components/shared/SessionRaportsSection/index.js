@@ -13,23 +13,15 @@ import {
 } from "./styles";
 import useActiveSessionApi from "hooks/useActiveSessionApi";
 import { convertBbCodeToJsx } from "utils/bbCode";
+import { useEffect, useRef, useState } from "react";
 
-const SessionRaportsSection = () => {
-  const { activeCharacter } = useSelector((state) => state.playerCharacter);
-  const activeCharacterApi = useCharacterApi(activeCharacter.characterId || "");
-  const { sessionMounted, records } = useActiveSessionApi();
-  const { colors } = useSystemTheme();
-
-  if (!activeCharacterApi.characterMounted || !sessionMounted) {
-    return null;
-  }
-
-  const characterGeneralInfo = {
-    ...activeCharacterApi.getCharacterGeneralData(),
-    classType: activeCharacterApi.getCharacterClass(),
-    type: activeCharacterApi.getCharacterType(),
-  };
-
+const RaportsList = ({
+  records,
+  lastElementRef,
+  characterGeneralInfo,
+  colors,
+}) => {
+  console.log("records", records);
   return (
     <Container>
       {records.map(
@@ -80,7 +72,52 @@ const SessionRaportsSection = () => {
           </SessionRecord>
         )
       )}
+      <div ref={lastElementRef}>.</div>
     </Container>
+  );
+};
+
+const SessionRaportsSection = () => {
+  const { activeCharacter } = useSelector((state) => state.playerCharacter);
+  const activeCharacterApi = useCharacterApi(activeCharacter.characterId || "");
+  const [displayedRecords, setDisplayedRecords] = useState([]);
+
+  const { sessionMounted, getRecords, refreshRecords } = useActiveSessionApi();
+  const { colors } = useSystemTheme();
+  const lastElementRef = useRef(null);
+
+  useEffect(() => {
+    if (sessionMounted) {
+      console.log("update!", getRecords());
+      setDisplayedRecords(getRecords());
+    }
+
+    if (lastElementRef.current) {
+      lastElementRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [sessionMounted, refreshRecords, getRecords]);
+
+  if (!activeCharacterApi.characterMounted || !sessionMounted) {
+    return null;
+  }
+
+  const characterGeneralInfo = {
+    ...activeCharacterApi.getCharacterGeneralData(),
+    classType: activeCharacterApi.getCharacterClass(),
+    type: activeCharacterApi.getCharacterType(),
+  };
+
+  return (
+    <>
+      {displayedRecords.length > 0 && (
+        <RaportsList
+          records={displayedRecords}
+          characterGeneralInfo={characterGeneralInfo}
+          lastElementRef={lastElementRef}
+          colors={colors}
+        />
+      )}
+    </>
   );
 };
 
