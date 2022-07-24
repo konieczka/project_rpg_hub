@@ -82,12 +82,12 @@ const PlayerCharacterManagementPanel = () => {
   const characterExpInfo = activeCharacterApi.getCharacterExpBar();
   const characterBaseAttrs = activeCharacterApi.getCharacterBaseAttrs();
   const characterSkills = activeCharacterApi.getCharacterSkills();
+  const characterPerks = activeCharacterApi.getCharacterPerks();
 
   return (
     <GenericModalContainer label="Karta postaci">
       <ModalBody>
         <Row>
-          {" "}
           <CharacterPortrait
             name={characterGeneralInfo.name}
             type={characterGeneralInfo.type}
@@ -140,7 +140,7 @@ const PlayerCharacterManagementPanel = () => {
             <h4>Punkty umiejętności: {skillsChange.pointsLeft || "Brak"}</h4>
             <ul>
               {characterSkills.map((skill) => (
-                <li>
+                <li key={`${skill.skillId}-character-management`}>
                   {skill.attrs.join("/")} {skill.name} : {skill.level}{" "}
                   {skillsChange.requestedChanges[skill.skillId]
                     ? `=> ${
@@ -170,6 +170,18 @@ const PlayerCharacterManagementPanel = () => {
                 </li>
               ))}
             </ul>
+            <h3 style={{ marginTop: "48px" }}>Perki</h3>
+            {characterPerks.length > 0 ? (
+              <ul>
+                {characterPerks.map((perk) => (
+                  <li key={`${perk.id}-character-management`}>
+                    {perk.description}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              "Brak"
+            )}
           </Column>
         </Row>
         {((characterExpInfo.availableSkillPoints &&
