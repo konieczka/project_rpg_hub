@@ -18,14 +18,14 @@ const CharacterCard = ({ mainColor }) => {
         {activeCharacter.expBar && (
           <ExperienceStatus {...activeCharacter.expBar} />
         )}
-        {activeCharacter.portraitUrl && (
+        {/* {activeCharacter.portraitUrl && (
           <CharacterPortrait
             name={activeCharacter.name}
             typeId={activeCharacter.typeId}
             classId={activeCharacter.classId}
             portraitUrl={activeCharacter.portraitUrl}
           />
-        )}
+        )} */}
         <DoubleColumnLayout>
           {activeCharacter.baseStatus && (
             <StatusBox {...activeCharacter.baseStatus} />

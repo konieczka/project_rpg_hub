@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useSystemMetadata from "hooks/useSystemMetadata";
+import useSystemTheme from "hooks/useSystemTheme";
 import useSessions from "hooks/useSessions";
 import { useNavigate } from "react-router";
 import { DropdownArrowRegular } from "components/shared/DropdownArrow";
@@ -14,28 +14,37 @@ import {
 
 const SessionSelect = () => {
   const [isSessionsDropdownOpen, setIsSessionsDropdownOpen] = useState(false);
-  const { colors, name } = useSystemMetadata();
+  const systemTheme = useSystemTheme();
   const navigate = useNavigate();
   const { fetchedSessions, activeSessionId, onSessionsSelect } = useSessions();
+
+  if (!systemTheme) {
+    return <div>Loading... </div>;
+  }
 
   return (
     <>
       <TopBarContainer
-        mainColor={colors.main}
+        mainColor={systemTheme.colors.main}
         onClick={() => setIsSessionsDropdownOpen((prev) => !prev)}
       >
-        {name}
+        Star Wars Test
         <DropdownArrowRegular
-          mainColor={colors.main}
+          mainColor={systemTheme.colors.main}
           isOpen={isSessionsDropdownOpen}
         />
       </TopBarContainer>
-      <DropdownBody mainColor={colors.main} isVisible={isSessionsDropdownOpen}>
+      <DropdownBody
+        mainColor={systemTheme.colors.main}
+        isVisible={isSessionsDropdownOpen}
+      >
         <SessionsList>
           {fetchedSessions.map((session) => (
             <SessionListItem
               key={session.sessionId}
-              isSelected={session.sessionId === activeSessionId && colors.main}
+              isSelected={
+                session.sessionId === activeSessionId && systemTheme.colors.main
+              }
               onClick={() => onSessionsSelect(session.sessionId)}
             >
               {session.name}

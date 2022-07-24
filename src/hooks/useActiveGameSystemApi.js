@@ -2,7 +2,7 @@ import { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { firestore } from "config/firebase";
 import { doc, getDoc } from "firebase/firestore";
-import { setMetadata } from "redux/gameSystemReducer";
+import { setActiveSystem, setMetadata } from "redux/gameSystemReducer";
 
 // Access game system data
 const useActiveGameSystemApi = () => {
@@ -71,11 +71,27 @@ const useActiveGameSystemApi = () => {
     fetchNonPlayableCharacters();
   }, [activeSystem, dispatch]);
 
+  const retrieveActiveSystem = useCallback(
+    async (systemId) => {
+      const res = await getDoc(doc(firestore, "systems", systemId));
+      dispatch(setActiveSystem(res.data()));
+    },
+    [dispatch]
+  );
+
   useEffect(() => {
     if (activeSystem && !activeSystem.metadataSet) {
       fetchSystemData();
+    } else if (!activeSystem) {
+      let activeSystemCachedId = localStorage.getItem("activeSystemId");
+      console.log("Wchodzę tu w ogole?", activeSystemCachedId);
+      if (!activeSystemCachedId !== null) {
+        retrieveActiveSystem(activeSystemCachedId);
+      }
     }
-  }, [activeSystem, fetchSystemData]);
+  }, [activeSystem, fetchSystemData, retrieveActiveSystem]);
+
+  return { isActiveSystemMounted: !!activeSystem };
 };
 
 export default useActiveGameSystemApi;

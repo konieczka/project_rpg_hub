@@ -1,18 +1,21 @@
 import PlayerGameplayPanel from "components/player/PlayerGameplayPanel";
-import useSystemMetadata from "hooks/useSystemMetadata";
+import useSystemTheme from "hooks/useSystemTheme";
 import { Container } from "./styles";
 
 const CentralSection = () => {
-  const { backgroundUrl, colors, description, name, systemId } =
-    useSystemMetadata();
+  const systemTheme = useSystemTheme();
+
+  if (!systemTheme) {
+    return <div>Loading... </div>;
+  }
 
   // TODO: conditional rendering of this section based on GM status of the user
   return (
-    <Container mainColor={colors.main}>
+    <Container mainColor={systemTheme.colors.main}>
       <PlayerGameplayPanel
-        mainColor={colors.main}
-        primaryColor={colors.primary}
-        secondaryColor={colors.secondary}
+        mainColor={systemTheme.colors.main}
+        primaryColor={systemTheme.colors.primary}
+        secondaryColor={systemTheme.colors.secondary}
       />
     </Container>
   );

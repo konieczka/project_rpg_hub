@@ -29,6 +29,7 @@ const useGameSystems = () => {
       dispatch(resetActiveSystem());
     } else {
       dispatch(setActiveSystem(system));
+      localStorage.setItem("activeSystemId", system.systemId);
     }
   };
 
