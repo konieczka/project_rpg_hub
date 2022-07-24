@@ -1,5 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-import characterClassesReducer from "./characterClassesReducer";
 import gameMasterReducer from "./gameMasterReducer";
 import gameSystemReducer from "./gameSystemReducer";
 import playerCharacterReducer from "./playerCharacterReducer";
@@ -14,7 +13,6 @@ export default configureStore({
     playerCharacter: playerCharacterReducer,
     gameMaster: gameMasterReducer,
     sessions: sessionsReducer,
-    characterClasses: characterClassesReducer,
   },
   middleware: [logger],
 });

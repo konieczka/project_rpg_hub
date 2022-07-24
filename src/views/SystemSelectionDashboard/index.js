@@ -12,14 +12,15 @@ import {
   ListItem,
   ListWrapper,
 } from "./styles";
-import useCharactersClasses from "hooks/useCharacterClasses";
+import useActiveGameSystemApi from "hooks/useActiveGameSystemApi";
 
 const SystemSelectionDashboard = () => {
   const { gameSystems, activeSystem, onSystemSelect } = useGameSystems();
   const { playerCharacters, activeCharacter, onCharacterSelect } =
     usePlayerCharacters();
   const { isPlayerLoggedInAsGm, onSelectGameMasterStatus } = useGameMaster();
-  useCharactersClasses();
+
+  useActiveGameSystemApi();
 
   const navigate = useNavigate();
 

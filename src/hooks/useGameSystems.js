@@ -4,6 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "config/firebase";
 import { setActiveSystem, resetActiveSystem } from "redux/gameSystemReducer";
 
+// Fetching and selecting active Game System
 const useGameSystems = () => {
   const [gameSystems, setGameSystems] = useState([]);
   const { activeSystem, isSystemSelected } = useSelector(
