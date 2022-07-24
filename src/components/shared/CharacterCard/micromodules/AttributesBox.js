@@ -1,4 +1,5 @@
 import {
+  ClickableAttributeItem,
   AttributeItem,
   AttributeKey,
   AttributeValue,
@@ -6,7 +7,46 @@ import {
 } from "./AttributesBox.styles";
 import { DebuffIndicator } from "./StatusBox";
 
-export const AttributesBox = ({ attrs }) => {
+const AttributeComponent = ({ displayAttr, isSelectable, onSelect }) => {
+  if (isSelectable) {
+    return (
+      <ClickableAttributeItem
+        key={`${displayAttr.identifier}-character-attribute`}
+        onClick={() =>
+          onSelect({ attrId: displayAttr.identifier, value: displayAttr.value })
+        }
+      >
+        <AttributeKey>{displayAttr.identifier}</AttributeKey>
+        <AttributeValue>
+          {displayAttr.value}
+          {displayAttr.debuffStatus && (
+            <>
+              &nbsp;
+              <DebuffIndicator debuffStatus={displayAttr.debuffStatus} />
+            </>
+          )}
+        </AttributeValue>
+      </ClickableAttributeItem>
+    );
+  }
+
+  return (
+    <AttributeItem key={`${displayAttr.identifier}-character-attribute`}>
+      <AttributeKey>{displayAttr.identifier}</AttributeKey>
+      <AttributeValue>
+        {displayAttr.value}
+        {displayAttr.debuffStatus && (
+          <>
+            &nbsp;
+            <DebuffIndicator debuffStatus={displayAttr.debuffStatus} />
+          </>
+        )}
+      </AttributeValue>
+    </AttributeItem>
+  );
+};
+
+export const AttributesBox = ({ attrs, selectableAttrs, onAttrSelect }) => {
   return (
     <Container>
       {attrs
@@ -20,18 +60,12 @@ export const AttributesBox = ({ attrs }) => {
           return 0;
         })
         .map((displayAttr) => (
-          <AttributeItem key={`${displayAttr.identifier}-character-attribute`}>
-            <AttributeKey>{displayAttr.identifier}</AttributeKey>
-            <AttributeValue>
-              {displayAttr.value}
-              {displayAttr.debuffStatus && (
-                <>
-                  &nbsp;
-                  <DebuffIndicator debuffStatus={displayAttr.debuffStatus} />
-                </>
-              )}
-            </AttributeValue>
-          </AttributeItem>
+          <AttributeComponent
+            key={displayAttr.attrId}
+            displayAttr={displayAttr}
+            isSelectable={selectableAttrs}
+            onSelect={onAttrSelect}
+          />
         ))}
     </Container>
   );

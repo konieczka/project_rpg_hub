@@ -13,6 +13,17 @@ export const AttributeItem = styled.div`
   flex-flow: row nowrap;
   align-items: center;
   gap: 48px;
+  padding: 2px;
+`;
+
+export const ClickableAttributeItem = styled(AttributeItem)`
+  cursor: pointer;
+  user-select: none;
+  transition-duration: 200ms;
+
+  &:hover {
+    color: white;
+  }
 `;
 
 export const AttributeKey = styled.div``;

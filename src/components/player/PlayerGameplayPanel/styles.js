@@ -14,3 +14,16 @@ export const Row = styled.div`
   flex-flow: row nowrap;
   justify-content: flex-end;
 `;
+
+export const TestDescriptionInputWrapper = styled.div`
+  padding: 8px 16px;
+  border: 1px solid white;
+  border-radius: 15px;
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 16px;
+  
+  h3 {
+    color: white;
+  }
+`;

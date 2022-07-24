@@ -15,6 +15,8 @@ const CharacterCard = ({
   characterBaseStatus,
   characterEqStatus,
   characterAttrs,
+  selectableAttrs = false,
+  onAttrSelect,
 }) => {
   return (
     <Wrapper>
@@ -35,7 +37,13 @@ const CharacterCard = ({
           {characterBaseStatus && <StatusBox {...characterBaseStatus} />}
           {characterEqStatus && <EqStatusBox {...characterEqStatus} />}
         </DoubleColumnLayout>
-        {characterAttrs && <AttributesBox attrs={characterAttrs} />}
+        {characterAttrs && (
+          <AttributesBox
+            selectableAttrs={selectableAttrs}
+            onAttrSelect={onAttrSelect}
+            attrs={characterAttrs}
+          />
+        )}
       </Container>
     </Wrapper>
   );

@@ -44,8 +44,8 @@ export const DICES = {
   },
 };
 
-export const getNumericInputValue = (number) => ({
-  symbol: `${number}`,
+export const getNumericInputValue = (number, label) => ({
+  symbol: label ? `${label}` : `${number}`,
   value: number,
   type: "number",
   isDice: false,

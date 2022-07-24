@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Button } from "components/shared/Button";
 import { ReactComponent as D4Icon } from "assets/d4icon.svg";
 import { ReactComponent as D6Icon } from "assets/d6icon.svg";
@@ -11,7 +10,6 @@ import {
   LOGICAL_OPERATORS,
   getCheckNotation,
   getNumericInputValue,
-  calculateNotation,
 } from "utils/checkEngine";
 import {
   Container,
@@ -26,47 +24,22 @@ import {
   NotationResult,
 } from "./styles";
 
-const DiceRollingDashboard = ({ mainColor, primaryColor, secondaryColor }) => {
-  const [isInDraftMode, setIsInDraftMode] = useState(false);
-  const [testNotation, setTestNotation] = useState([]);
-  const [numericInputValue, setNumericInputValue] = useState(0);
-  const [previousTests, setPreviousTests] = useState([]);
-
-  const toggleDraftMode = () => setIsInDraftMode((prev) => !prev);
-
-  const resetTest = () => {
-    if (isInDraftMode) {
-      toggleDraftMode();
-      setTestNotation([]);
-      setNumericInputValue(0);
-    }
-  };
-
-  const testNotationPush = (el) => {
-    if (isInDraftMode) {
-      if (
-        (testNotation.length > 0 &&
-          testNotation[testNotation.length - 1].type !== el.type) ||
-        (testNotation.length === 0 && el.type !== "op")
-      ) {
-        setTestNotation((prev) => [...prev, el]);
-      }
-    }
-  };
-
-  const submitTest = () => {
-    if (isInDraftMode && testNotation.length) {
-      setPreviousTests((prev) => [...prev, testNotation]);
-
-      if (previousTests.length >= 2) {
-        previousTests.shift();
-      }
-
-      console.log(calculateNotation(testNotation));
-      resetTest();
-    }
-  };
-
+const DiceRollingDashboard = ({
+  mainColor,
+  primaryColor,
+  secondaryColor,
+  testNotation,
+  testNotationPush,
+  isInDraftMode,
+  toggleDraftMode,
+  submitTest,
+  resetTest,
+  previousTests,
+  numericInputValue,
+  setNumericInputValue,
+  setTestNotation,
+  setIsInDraftMode,
+}) => {
   return (
     <Container customColor={mainColor}>
       <Row>
