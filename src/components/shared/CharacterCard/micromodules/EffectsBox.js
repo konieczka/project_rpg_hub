@@ -30,7 +30,7 @@ export const EffectsBox = ({ effects }) => {
           {effect.name}
           <Tooltip className="effect-tooltip">
             <TooltipBody>
-              <strong>{effect.description}</strong>
+              {effect.description && <strong>{effect.description}</strong>}
               {effect.hpModifier && (
                 <p>
                   {effect.hpModifier > 0 && "+"}
@@ -43,11 +43,18 @@ export const EffectsBox = ({ effects }) => {
                   {effect.mpModifier} MAX MP
                 </p>
               )}
-              {effect.attrModifiers &&
-                Object.keys(effect.attrModifiers).map((attrId) => (
+              {effect.attrsModifiers &&
+                Object.keys(effect.attrsModifiers).map((attrId) => (
                   <p key={`${attrId}-status-effect-${effect.name}`}>
-                    {effect.attrModifiers[attrId] > 0 && "+"}
-                    {effect.attrModifiers[attrId]} {attrId}
+                    {effect.attrsModifiers[attrId] > 0 && "+"}
+                    {effect.attrsModifiers[attrId]} {attrId}
+                  </p>
+                ))}
+              {effect.baseModifiers &&
+                Object.keys(effect.baseModifiers).map((attrId) => (
+                  <p key={`${attrId}-status-effect-${effect.name}`}>
+                    {effect.baseModifiers[attrId] > 0 && "+"}
+                    {effect.baseModifiers[attrId]} {attrId}
                   </p>
                 ))}
             </TooltipBody>

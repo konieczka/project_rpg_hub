@@ -10,6 +10,7 @@ export const Container = styled.div`
   flex-flow: column nowrap;
   align-content: center;
   justify-items: center;
+  padding-bottom: 16px;
 
   ${({ mainColor }) =>
     mainColor &&

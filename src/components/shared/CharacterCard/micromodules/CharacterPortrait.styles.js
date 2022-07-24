@@ -16,6 +16,7 @@ export const AvatarContainer = styled.div`
 export const CharacterDetailsSection = styled.div`
   display: flex;
   flex-flow: column nowrap;
+  padding: 0 16px;
   margin-right: 48px;
   margin-top: -24px;
   color: white;
@@ -26,8 +27,12 @@ export const CharacterDetailsSection = styled.div`
     filter: drop-shadow(2px 2px 1px black);
   }
 
+  h1 {
+    font-size: 28px;
+  }
+
   h2 {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 500;
   }
   h3 {

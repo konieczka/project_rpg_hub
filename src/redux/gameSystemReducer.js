@@ -30,12 +30,18 @@ export const gameSystemSlice = createSlice({
     },
     setMetadata: (state, action) => {
       state.activeSystemMetadata[action.payload.type] = action.payload.content;
+    },
+    finishMetadataSetting: (state) => {
       state.metadataSet = true;
     },
   },
 });
 
-export const { setActiveSystem, resetActiveSystem, setMetadata } =
-  gameSystemSlice.actions;
+export const {
+  setActiveSystem,
+  resetActiveSystem,
+  setMetadata,
+  finishMetadataSetting,
+} = gameSystemSlice.actions;
 
 export default gameSystemSlice.reducer;

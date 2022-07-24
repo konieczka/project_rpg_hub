@@ -1,6 +1,5 @@
 import CentralSection from "components/shared/CentralSection";
 import SessionSelect from "components/shared/SessionSelect";
-import useCharacterApi from "hooks/useCharacterApi";
 import useActiveGameSystemApi from "hooks/useActiveGameSystemApi";
 import useSystemTheme from "hooks/useSystemTheme";
 import { Container } from "./styles";
@@ -10,9 +9,8 @@ const MainGameView = () => {
   const systemTheme = useSystemTheme();
   const { isActiveSystemMounted } = useActiveGameSystemApi();
   const { activeCharacter } = useSelector((state) => state.playerCharacter);
-  const activeCharacterApi = useCharacterApi(activeCharacter.characterId || "");
 
-  console.log(activeCharacterApi.getCharacterGeneralData());
+  console.log("dupa", isActiveSystemMounted);
 
   if (!isActiveSystemMounted || !systemTheme) {
     return <div>Loading... </div>;

@@ -2,11 +2,17 @@ import { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { firestore } from "config/firebase";
 import { doc, getDoc } from "firebase/firestore";
-import { setActiveSystem, setMetadata } from "redux/gameSystemReducer";
+import {
+  setActiveSystem,
+  setMetadata,
+  finishMetadataSetting,
+} from "redux/gameSystemReducer";
 
 // Access game system data
 const useActiveGameSystemApi = () => {
-  const { activeSystem } = useSelector((state) => state.gameSystems);
+  const { activeSystem, metadataSet } = useSelector(
+    (state) => state.gameSystems
+  );
   const dispatch = useDispatch();
 
   const fetchSystemData = useCallback(async () => {
@@ -69,6 +75,7 @@ const useActiveGameSystemApi = () => {
     fetchPerks();
     fetchStatusEffects();
     fetchNonPlayableCharacters();
+    setTimeout(() => dispatch(finishMetadataSetting()), 1000);
   }, [activeSystem, dispatch]);
 
   const retrieveActiveSystem = useCallback(
@@ -80,17 +87,14 @@ const useActiveGameSystemApi = () => {
   );
 
   useEffect(() => {
-    if (activeSystem && !activeSystem.metadataSet) {
+    if (activeSystem && !metadataSet) {
       fetchSystemData();
-    } else if (!activeSystem) {
-      let activeSystemCachedId = localStorage.getItem("activeSystemId");
-      if (!activeSystemCachedId !== null) {
-        retrieveActiveSystem(activeSystemCachedId);
-      }
     }
-  }, [activeSystem, fetchSystemData, retrieveActiveSystem]);
+  }, [activeSystem, fetchSystemData, metadataSet]);
 
-  return { isActiveSystemMounted: !!activeSystem };
+  return {
+    isActiveSystemMounted: !!activeSystem && metadataSet,
+  };
 };
 
 export default useActiveGameSystemApi;
