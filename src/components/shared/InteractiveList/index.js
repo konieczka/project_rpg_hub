@@ -11,7 +11,7 @@ import {
 import useSystemTheme from "hooks/useSystemTheme";
 import { addAlpha } from "utils/addAlpha";
 
-const InteractiveList = ({ listData }) => {
+const InteractiveList = ({ listData, onSelectItem = () => {} }) => {
   const [expandedItemId, setExpandedItemId] = useState("");
   const systemTheme = useSystemTheme();
 
@@ -38,6 +38,7 @@ const InteractiveList = ({ listData }) => {
             <CollapsibleSection>
               {firstLevel.items.map((secondLevel) => (
                 <NestedItem
+                  onClick={() => onSelectItem(secondLevel.id)}
                   key={secondLevel.id}
                   highlighted={
                     secondLevel.highlighted &&

@@ -5,6 +5,7 @@ export const Container = styled.div`
   flex-flow: column nowrap;
   color: white;
   height: calc(100%);
+  width: 100%;
   overflow-y: scroll;
 
   ::-webkit-scrollbar {
