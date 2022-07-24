@@ -154,6 +154,13 @@ const PlayerInventoryPanel = () => {
                     bgColor={
                       itemDetails.isEquipped ? colors.secondary : colors.primary
                     }
+                    onClick={() => {
+                      activeCharacterApi.handleEquippableItem(selectedItemId);
+                      setItemDetails((current) => ({
+                        ...current,
+                        isEquipped: !current.isEquipped,
+                      }));
+                    }}
                   >
                     {itemDetails.isEquipped ? "Zdejmij" : "Wyposaż"}
                   </Button>

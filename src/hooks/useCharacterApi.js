@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { firestore } from "config/firebase";
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, setDoc, onSnapshot } from "firebase/firestore";
 import { useState, useEffect } from "react";
 
 const determineDebuffStatus = (baseValue, newValue) => {
@@ -64,8 +64,22 @@ const useCharacterApi = (characterId) => {
       }
     }
 
-    return unsub();
+    // return unsub();
   }, [characterId, activeSystem, dispatch, synchronizedState.characterId]);
+
+  const sendUpdate = (updatedData) => {
+    console.log("onUpdate", updatedData);
+    setDoc(
+      doc(
+        firestore,
+        "playerCharacters",
+        activeSystem.systemId,
+        "characters",
+        characterId
+      ),
+      updatedData
+    );
+  };
 
   const getCharacterGeneralData = () => ({
     name: synchronizedState.name,
@@ -200,6 +214,24 @@ const useCharacterApi = (characterId) => {
       isEquipped: synchronizedState.equippedItems.includes(item.itemId),
     }));
 
+  const handleEquippableItem = (itemId) => {
+    if (synchronizedState.equippedItems.includes(itemId)) {
+      const updatedData = {
+        ...synchronizedState,
+        equippedItems: synchronizedState.equippedItems.filter(
+          (equippedItem) => itemId !== equippedItem
+        ),
+      };
+      sendUpdate(updatedData);
+    } else {
+      const updatedData = {
+        ...synchronizedState,
+        equippedItems: [...synchronizedState.equippedItems, itemId],
+      };
+      sendUpdate(updatedData);
+    }
+  };
+
   return {
     characterMounted: !!synchronizedState.characterId,
     getCharacterGeneralData,
@@ -212,6 +244,7 @@ const useCharacterApi = (characterId) => {
     getCharacterEqStatus,
     getCharacterAttrs,
     getCharacterInventory,
+    handleEquippableItem,
   };
 };
 
