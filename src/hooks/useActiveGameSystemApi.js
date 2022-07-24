@@ -84,7 +84,6 @@ const useActiveGameSystemApi = () => {
       fetchSystemData();
     } else if (!activeSystem) {
       let activeSystemCachedId = localStorage.getItem("activeSystemId");
-      console.log("Wchodzę tu w ogole?", activeSystemCachedId);
       if (!activeSystemCachedId !== null) {
         retrieveActiveSystem(activeSystemCachedId);
       }

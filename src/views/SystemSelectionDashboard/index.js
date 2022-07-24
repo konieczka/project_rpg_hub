@@ -2,8 +2,8 @@ import { HeadingLarge } from "components/shared/Heading";
 import { Button } from "components/shared/Button";
 import { useNavigate } from "react-router";
 import useGameMaster from "hooks/useGameMaster";
-import useGameSystems from "hooks/useGameSystems";
-import usePlayerCharacters from "hooks/usePlayerCharacters";
+import useGameSystems from "hooks/useSelectSystem";
+import usePlayerCharacters from "hooks/useSelectCharacter";
 import { ROUTES } from "routing/router";
 import {
   Container,

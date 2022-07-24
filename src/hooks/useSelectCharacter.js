@@ -49,6 +49,7 @@ const usePlayerCharacters = () => {
       dispatch(resetActiveCharacter());
     } else {
       dispatch(setActiveCharacter(character));
+      localStorage.setItem("activeCharacterId", character.characterId);
     }
   };
 
