@@ -9,70 +9,18 @@ import {
   SessionRecord,
   SessionRecordBody,
   TestResult,
+  RecordTimestamp,
 } from "./styles";
-
-const testRaports = [
-  {
-    raportIndex: 1,
-    isTest: true,
-    isTextMessage: false,
-    message: "",
-    testData: {
-      testDescription: "Przykładowy opis testu dla lepszego sesji",
-      testTemplate: "STR 20  -  10 (Trudny)  -  2d6",
-      testSetdown: "20  -  10  -   4 (3/1)     = 6",
-      testResult: 6,
-    },
-    author: {
-      npc: "",
-      pc: "test-vader",
-    },
-    createdAt: "",
-    postedByGm: moment().format(),
-  },
-  {
-    raportIndex: 2,
-    isTest: true,
-    isTextMessage: false,
-    message: "",
-    testData: {
-      testDescription: "Przykładowy opis testu dla lepszego sesji",
-      testTemplate: "STR 20  -  10 (Trudny)  -  2d6",
-      testSetdown: "20  -  10  -   4 (3/1)     = -6",
-      testResult: -6,
-    },
-    author: {
-      npc: "",
-      pc: "test-vader",
-    },
-    createdAt: "",
-    postedByGm: moment().format(),
-  },
-  {
-    raportIndex: 3,
-    isTest: false,
-    message: "Ja pierdole...",
-    testData: {
-      testTemplate: "",
-      testSetdown: "",
-      testResult: null,
-      testDescription: "",
-    },
-    author: {
-      npc: "",
-      pc: "test-vader",
-    },
-    createdAt: "",
-    postedByGm: moment().format(),
-  },
-];
+import useActiveSessionApi from "hooks/useActiveSessionApi";
+import { convertBbCodeToJsx } from "utils/bbCode";
 
 const SessionRaportsSection = () => {
   const { activeCharacter } = useSelector((state) => state.playerCharacter);
   const activeCharacterApi = useCharacterApi(activeCharacter.characterId || "");
+  const { sessionMounted, records } = useActiveSessionApi();
   const { colors } = useSystemTheme();
 
-  if (!activeCharacterApi.characterMounted) {
+  if (!activeCharacterApi.characterMounted || !sessionMounted) {
     return null;
   }
 
@@ -84,7 +32,7 @@ const SessionRaportsSection = () => {
 
   return (
     <Container>
-      {testRaports.map(
+      {records.map(
         ({
           raportIndex,
           isTest,
@@ -95,6 +43,9 @@ const SessionRaportsSection = () => {
           postedByGm,
         }) => (
           <SessionRecord>
+            <RecordTimestamp>
+              {moment(createdAt).format("HH:m MMM Do YY")}
+            </RecordTimestamp>
             <AvatarPlacer>
               <CharacterPortrait
                 name={characterGeneralInfo.name}
@@ -111,7 +62,7 @@ const SessionRaportsSection = () => {
                     : "TEST"}
                 </h2>
                 <span>{testData.testTemplate}</span>
-                <strong>{testData.testSetdown}</strong>
+                <strong>{testData.testRundown}</strong>
                 <TestResult
                   mainColor={
                     testData.testResult > 0 ? colors.primary : colors.secondary
@@ -123,7 +74,7 @@ const SessionRaportsSection = () => {
             )}
             {!isTest && (
               <SessionRecordBody>
-                <p dangerouslySetInnerHTML={{ __html: message }}></p>
+                <p>{convertBbCodeToJsx(message)}</p>
               </SessionRecordBody>
             )}
           </SessionRecord>

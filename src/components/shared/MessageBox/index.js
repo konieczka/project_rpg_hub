@@ -14,8 +14,13 @@ import {
   TextPreviewArea,
 } from "./styles";
 
-const MessageBox = ({ mainColor, primaryColor }) => {
-  const [inputValue, setInputValue] = useState("");
+const MessageBox = ({
+  mainColor,
+  primaryColor,
+  inputValue,
+  setInputValue,
+  onSubmit,
+}) => {
   const [isPreview, setIsPreview] = useState(false);
   const inputRef = useRef(null);
 
@@ -103,7 +108,9 @@ const MessageBox = ({ mainColor, primaryColor }) => {
           <EditorButton onClick={() => setIsPreview((prev) => !prev)}>
             Podgląd
           </EditorButton>
-          <EditorButton customColor={primaryColor}>Wyślij</EditorButton>
+          <EditorButton customColor={primaryColor} onClick={onSubmit}>
+            Wyślij
+          </EditorButton>
         </FinalizationButtons>
       </EditorButtons>
     </Container>

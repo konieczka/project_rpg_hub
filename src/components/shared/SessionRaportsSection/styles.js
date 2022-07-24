@@ -7,6 +7,22 @@ export const Container = styled.div`
   padding: 16px;
   height: 100%;
   margin-top: 70px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 627px;
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.15);
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  }
 `;
 
 export const SessionRecord = styled.div`
@@ -71,4 +87,12 @@ export const TestResult = styled.div`
     css`
       color: ${mainColor};
     `}
+`;
+
+export const RecordTimestamp = styled.div`
+  position: absolute;
+  color: rgba(255, 255, 255, 0.6);
+  top: -18px;
+  right: 0;
+  font-size: 12px;
 `;

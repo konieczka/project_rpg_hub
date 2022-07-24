@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { firestore } from "config/firebase";
 import { doc, getDoc, setDoc, onSnapshot } from "firebase/firestore";
 import { useState, useEffect } from "react";
@@ -16,7 +16,6 @@ const useCharacterApi = (characterId) => {
   const { activeSystem, activeSystemMetadata } = useSelector(
     (state) => state.gameSystems
   );
-  const dispatch = useDispatch();
 
   const [synchronizedState, setSynchronizedState] = useState({
     characterId: "",
@@ -62,7 +61,7 @@ const useCharacterApi = (characterId) => {
     }
 
     // return unsub();
-  }, [characterId, activeSystem, dispatch, synchronizedState.characterId]);
+  }, [characterId, activeSystem, synchronizedState.characterId]);
 
   const sendUpdate = (updatedData) => {
     setDoc(

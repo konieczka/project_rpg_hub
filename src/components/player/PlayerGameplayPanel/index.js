@@ -7,16 +7,21 @@ import MessageBox from "components/shared/MessageBox";
 import { calculateNotation, getNumericInputValue } from "utils/checkEngine";
 import { Container, Row, TestDescriptionInputWrapper } from "./styles";
 import { TextInput } from "components/shared/Input";
+import useActiveSessionApi from "hooks/useActiveSessionApi";
+import { wrapMessageRecord, wrapTestRecord } from "utils/sessionRecord";
 
 const PlayerGameplayPanel = ({ mainColor, primaryColor, secondaryColor }) => {
   const { activeCharacter } = useSelector((state) => state.playerCharacter);
   const activeCharacterApi = useCharacterApi(activeCharacter.characterId || "");
+  const { sessionMounted, handleSendRecord } = useActiveSessionApi();
 
   const [isInDraftMode, setIsInDraftMode] = useState(false);
   const [testNotation, setTestNotation] = useState([]);
   const [numericInputValue, setNumericInputValue] = useState(0);
   const [previousTests, setPreviousTests] = useState([]);
   const [testDescription, setTestDescription] = useState("");
+
+  const [inputValue, setInputValue] = useState("");
 
   const toggleDraftMode = () => setIsInDraftMode((prev) => !prev);
 
@@ -25,6 +30,7 @@ const PlayerGameplayPanel = ({ mainColor, primaryColor, secondaryColor }) => {
       toggleDraftMode();
       setTestNotation([]);
       setNumericInputValue(0);
+      setTestDescription("");
     }
   };
 
@@ -48,12 +54,24 @@ const PlayerGameplayPanel = ({ mainColor, primaryColor, secondaryColor }) => {
         previousTests.shift();
       }
 
-      console.log(calculateNotation(testNotation));
+      handleSendRecord(
+        wrapTestRecord({
+          ...calculateNotation(testNotation),
+          testDescription,
+        })
+      );
       resetTest();
     }
   };
 
-  if (!activeCharacterApi.characterMounted) {
+  const submitMessage = () => {
+    if (inputValue) {
+      handleSendRecord(wrapMessageRecord(inputValue));
+      setInputValue("");
+    }
+  };
+
+  if (!activeCharacterApi.characterMounted && !sessionMounted) {
     return null;
   }
 
@@ -101,7 +119,13 @@ const PlayerGameplayPanel = ({ mainColor, primaryColor, secondaryColor }) => {
         setTestNotation={setTestNotation}
         setIsInDraftMode={setIsInDraftMode}
       />
-      <MessageBox mainColor={mainColor} primaryColor={primaryColor} />
+      <MessageBox
+        mainColor={mainColor}
+        primaryColor={primaryColor}
+        inputValue={inputValue}
+        setInputValue={setInputValue}
+        onSubmit={submitMessage}
+      />
     </Container>
   );
 };

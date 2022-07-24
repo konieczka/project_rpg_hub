@@ -110,7 +110,7 @@ export const calculateNotation = (checkNotationArr) => {
   transcript.push(`= ${buffer}`);
 
   return {
-    result: buffer,
+    testResult: buffer,
     testTemplate: getCheckNotation(checkNotationArr),
     testRundown: transcript.join(" "),
   };
