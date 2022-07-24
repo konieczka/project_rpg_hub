@@ -1,5 +1,6 @@
 import PlayerGameplayPanel from "components/player/PlayerGameplayPanel";
 import useSystemTheme from "hooks/useSystemTheme";
+import SessionRaportsSection from "../SessionRaportsSection";
 import { Container } from "./styles";
 
 const CentralSection = () => {
@@ -12,6 +13,7 @@ const CentralSection = () => {
   // TODO: conditional rendering of this section based on GM status of the user
   return (
     <Container mainColor={systemTheme.colors.main}>
+      <SessionRaportsSection />
       <PlayerGameplayPanel
         mainColor={systemTheme.colors.main}
         primaryColor={systemTheme.colors.primary}
