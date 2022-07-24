@@ -4,6 +4,7 @@ import useActiveGameSystemApi from "hooks/useActiveGameSystemApi";
 import useSystemTheme from "hooks/useSystemTheme";
 import { Container } from "./styles";
 import PlayerInventoryPanel from "components/player/PlayerInventoryPanel";
+import PlayerDashboard from "components/player/PlayerDashboard";
 
 const MainGameView = () => {
   const systemTheme = useSystemTheme();
@@ -19,7 +20,7 @@ const MainGameView = () => {
     <Container backgroundUrl={systemTheme.backgroundUrl}>
       <SessionSelect />
       <CentralSection />
-      <PlayerInventoryPanel />
+      <PlayerDashboard />
     </Container>
   );
 };

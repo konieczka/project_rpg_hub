@@ -4,10 +4,9 @@ import useSystemTheme from "hooks/useSystemTheme";
 import { useSelector } from "react-redux";
 import GenericModalContainer from "components/shared/GenericModalContainer";
 import InteractiveList from "components/shared/InteractiveList";
-import { Button, OutlinePanelButton } from "components/shared/Button";
+import { Button } from "components/shared/Button";
 import {
   ButtonsGroup,
-  Container,
   ItemDetailsBox,
   ListContainer,
   ModalBody,
@@ -40,7 +39,6 @@ const PlayerInventoryPanel = () => {
   const { activeCharacter } = useSelector((state) => state.playerCharacter);
   const activeCharacterApi = useCharacterApi(activeCharacter.characterId || "");
   const { colors } = useSystemTheme();
-  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const [selectedItemId, setSelectedItemId] = useState("");
   const [itemDetails, setItemDetails] = useState(null);
@@ -82,121 +80,96 @@ const PlayerInventoryPanel = () => {
   };
 
   return (
-    <Container>
-      {isModalVisible && (
-        <GenericModalContainer label="Ekwipunek">
-          <ModalBody>
-            <ListContainer>
-              <InteractiveList
-                listData={getInventoryReadyToDisplay()}
-                onSelectItem={(itemId) =>
-                  setSelectedItemId((prev) => (prev === itemId ? "" : itemId))
-                }
-              />
-            </ListContainer>
-            {itemDetails && (
-              <ItemDetailsBox>
-                <h3>{itemDetails.itemData.name}</h3>
-                <p>{itemDetails.itemData.description}</p>
-                {itemDetails.itemData.whenEquipped && (
-                  <ul>
-                    {itemDetails.itemData.whenEquipped.attrs &&
-                      Object.keys(itemDetails.itemData.whenEquipped.attrs).map(
-                        (attrId) => (
-                          <li key={`${attrId}-modifier-by-item`}>
-                            {itemDetails.itemData.whenEquipped.attrs[attrId]}{" "}
-                            {attrId}
-                          </li>
-                        )
-                      )}
-                    {itemDetails.itemData.whenEquipped.base && (
-                      <>
-                        {itemDetails.itemData.whenEquipped.base.atkModifier >
-                          0 && (
-                          <li>
-                            {itemDetails.itemData.whenEquipped.base.atkModifier}{" "}
-                            ATK
-                          </li>
-                        )}
-                        {itemDetails.itemData.whenEquipped.base.defModifier >
-                          0 && (
-                          <li>
-                            {itemDetails.itemData.whenEquipped.base.defModifier}{" "}
-                            DEF
-                          </li>
-                        )}
-                        {itemDetails.itemData.whenEquipped.base.hpModifier >
-                          0 && (
-                          <li>
-                            {itemDetails.itemData.whenEquipped.base.hpModifier}{" "}
-                            HP
-                          </li>
-                        )}
-                        {itemDetails.itemData.whenEquipped.base.mpModifier >
-                          0 && (
-                          <li>
-                            {itemDetails.itemData.whenEquipped.base.mpModifier}{" "}
-                            MP
-                          </li>
-                        )}
-                      </>
+    <GenericModalContainer label="Ekwipunek">
+      <ModalBody>
+        <ListContainer>
+          <InteractiveList
+            listData={getInventoryReadyToDisplay()}
+            onSelectItem={(itemId) =>
+              setSelectedItemId((prev) => (prev === itemId ? "" : itemId))
+            }
+          />
+        </ListContainer>
+        {itemDetails && (
+          <ItemDetailsBox>
+            <h3>{itemDetails.itemData.name}</h3>
+            <p>{itemDetails.itemData.description}</p>
+            {itemDetails.itemData.whenEquipped && (
+              <ul>
+                {itemDetails.itemData.whenEquipped.attrs &&
+                  Object.keys(itemDetails.itemData.whenEquipped.attrs).map(
+                    (attrId) => (
+                      <li key={`${attrId}-modifier-by-item`}>
+                        {itemDetails.itemData.whenEquipped.attrs[attrId]}{" "}
+                        {attrId}
+                      </li>
+                    )
+                  )}
+                {itemDetails.itemData.whenEquipped.base && (
+                  <>
+                    {itemDetails.itemData.whenEquipped.base.atkModifier > 0 && (
+                      <li>
+                        {itemDetails.itemData.whenEquipped.base.atkModifier} ATK
+                      </li>
                     )}
-                  </ul>
+                    {itemDetails.itemData.whenEquipped.base.defModifier > 0 && (
+                      <li>
+                        {itemDetails.itemData.whenEquipped.base.defModifier} DEF
+                      </li>
+                    )}
+                    {itemDetails.itemData.whenEquipped.base.hpModifier > 0 && (
+                      <li>
+                        {itemDetails.itemData.whenEquipped.base.hpModifier} HP
+                      </li>
+                    )}
+                    {itemDetails.itemData.whenEquipped.base.mpModifier > 0 && (
+                      <li>
+                        {itemDetails.itemData.whenEquipped.base.mpModifier} MP
+                      </li>
+                    )}
+                  </>
                 )}
-                {itemDetails.itemData.itemPerks && (
-                  <ul>
-                    {itemDetails.itemData.itemPerks.map((perk) => (
-                      <li key={`${perk}-perk`}>{perk}</li>
-                    ))}
-                  </ul>
-                )}
-                <ButtonsGroup>
-                  {itemDetails.itemData.whenEquipped && (
-                    <Button
-                      bgColor={
-                        itemDetails.isEquipped
-                          ? colors.secondary
-                          : colors.primary
-                      }
-                      onClick={() => {
-                        activeCharacterApi.handleEquippableItem(selectedItemId);
-                        setItemDetails((current) => ({
-                          ...current,
-                          isEquipped: !current.isEquipped,
-                        }));
-                      }}
-                    >
-                      {itemDetails.isEquipped ? "Zdejmij" : "Wyposaż"}
-                    </Button>
-                  )}
-                  {itemDetails.itemData.onUse && (
-                    <Button
-                      onClick={() =>
-                        activeCharacterApi.handleConsumableItem(selectedItemId)
-                      }
-                      bgColor={colors.primary}
-                    >
-                      Użyj
-                    </Button>
-                  )}
-                </ButtonsGroup>
-              </ItemDetailsBox>
+              </ul>
             )}
-          </ModalBody>
-        </GenericModalContainer>
-      )}
-      <OutlinePanelButton
-        bgColor={colors.main}
-        hoverColor={colors.primary}
-        onClick={() => {
-          setIsModalVisible((prev) => !prev);
-          setSelectedItemId("");
-          setItemDetails(null);
-        }}
-      >
-        Ekwipunek
-      </OutlinePanelButton>
-    </Container>
+            {itemDetails.itemData.itemPerks && (
+              <ul>
+                {itemDetails.itemData.itemPerks.map((perk) => (
+                  <li key={`${perk}-perk`}>{perk}</li>
+                ))}
+              </ul>
+            )}
+            <ButtonsGroup>
+              {itemDetails.itemData.whenEquipped && (
+                <Button
+                  bgColor={
+                    itemDetails.isEquipped ? colors.secondary : colors.primary
+                  }
+                  onClick={() => {
+                    activeCharacterApi.handleEquippableItem(selectedItemId);
+                    setItemDetails((current) => ({
+                      ...current,
+                      isEquipped: !current.isEquipped,
+                    }));
+                  }}
+                >
+                  {itemDetails.isEquipped ? "Zdejmij" : "Wyposaż"}
+                </Button>
+              )}
+              {itemDetails.itemData.onUse && (
+                <Button
+                  onClick={() =>
+                    activeCharacterApi.handleConsumableItem(selectedItemId)
+                  }
+                  bgColor={colors.primary}
+                >
+                  Użyj
+                </Button>
+              )}
+            </ButtonsGroup>
+          </ItemDetailsBox>
+        )}
+      </ModalBody>
+    </GenericModalContainer>
   );
 };
 

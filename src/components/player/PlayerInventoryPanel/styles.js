@@ -1,14 +1,5 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
-  display: flex;
-  width: 450px;
-  flex-flow: column nowrap;
-  justify-content: flex-end;
-  padding: 16px;
-  gap: 16px;
-`;
-
 export const ModalBody = styled.div`
   display: flex;
   height: 350px;

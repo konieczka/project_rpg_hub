@@ -28,9 +28,6 @@ const useCharacterApi = (characterId) => {
     effects: [],
     perks: [],
   });
-
-  console.log(characterId, synchronizedState);
-
   useEffect(() => {
     const fetchCharacterData = async () => {
       const res = await getDoc(
@@ -68,7 +65,6 @@ const useCharacterApi = (characterId) => {
   }, [characterId, activeSystem, dispatch, synchronizedState.characterId]);
 
   const sendUpdate = (updatedData) => {
-    console.log("onUpdate", updatedData);
     setDoc(
       doc(
         firestore,
@@ -105,6 +101,12 @@ const useCharacterApi = (characterId) => {
     synchronizedState.effects.map(
       (effect) => activeSystemMetadata.statusEffects[effect]
     );
+
+  const getCharacterSkills = () =>
+    synchronizedState.skills.map((skill) => ({
+      ...activeSystemMetadata.skills[skill.skillId],
+      level: skill.level,
+    }));
 
   const getCharacterExpBar = () => synchronizedState.expBar;
 
@@ -270,6 +272,14 @@ const useCharacterApi = (characterId) => {
     }));
   };
 
+  const getCharacterBaseAttrs = () =>
+    Object.keys(synchronizedState.attrs).map((attrId) => ({
+      identifier: attrId,
+      value: synchronizedState.attrs[attrId],
+    }));
+
+  const getCharacterBaseBaseStatus = () => synchronizedState.baseStatus;
+
   const getCharacterInventory = () =>
     synchronizedState.inventory.map((item) => ({
       ...item,
@@ -333,6 +343,53 @@ const useCharacterApi = (characterId) => {
     sendUpdate(updatedData);
   };
 
+  const handleLevelUp = (
+    requestedChangesForSkills,
+    requestedChangesForAttrs
+  ) => {
+    const changesForSkillsArr = Object.keys(requestedChangesForSkills);
+    const changedForAttrsArr = Object.keys(requestedChangesForAttrs).flatMap(
+      (attrId) => ({
+        identifier: attrId,
+        value: requestedChangesForAttrs[attrId],
+      })
+    );
+
+    var calculatedState = {
+      ...synchronizedState,
+      skills: synchronizedState.skills.map((skill) => {
+        if (changesForSkillsArr.includes(skill.skillId)) {
+          return {
+            ...skill,
+            level: skill.level + requestedChangesForSkills[skill.skillId],
+          };
+        }
+
+        return skill;
+      }),
+      expBar: {
+        ...synchronizedState.expBar,
+        availableSkillPoints: 0,
+      },
+    };
+
+    changedForAttrsArr.forEach(({ identifier, value }) => {
+      calculatedState = {
+        ...calculatedState,
+        attrs: {
+          ...calculatedState.attrs,
+          [identifier]: calculatedState.attrs[identifier] + value,
+        },
+        expBar: {
+          ...calculatedState.expBar,
+          availableAttrPoints: 0,
+        },
+      };
+    });
+
+    sendUpdate(calculatedState);
+  };
+
   return {
     characterMounted: !!synchronizedState.characterId,
     getCharacterGeneralData,
@@ -344,9 +401,13 @@ const useCharacterApi = (characterId) => {
     getCharacterExpBar,
     getCharacterEqStatus,
     getCharacterAttrs,
+    getCharacterSkills,
+    getCharacterBaseAttrs,
+    getCharacterBaseBaseStatus,
     getCharacterInventory,
     handleEquippableItem,
     handleConsumableItem,
+    handleLevelUp,
   };
 };
 
