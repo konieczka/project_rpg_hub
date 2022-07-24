@@ -6,6 +6,7 @@ export const Container = styled.div`
   flex-flow: column nowrap;
   justify-content: flex-end;
   padding: 16px;
+  gap: 16px;
 `;
 
 export const ModalBody = styled.div`
