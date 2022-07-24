@@ -4,7 +4,7 @@ import { ReactComponent as BuffIcon } from "assets/buffIcon.svg";
 import { ReactComponent as DebuffIcon } from "assets/debuffIcon.svg";
 import { Container, StatusItem } from "./StatusBox.styles";
 
-const DebuffIndicator = ({ debuffStatus }) => {
+export const DebuffIndicator = ({ debuffStatus }) => {
   if (debuffStatus === "debuff") {
     return <DebuffIcon />;
   } else if (debuffStatus === "buff") {

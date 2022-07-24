@@ -92,7 +92,37 @@ const useCharacterApi = (characterId) => {
     );
 
   const getCharacterExpBar = () => synchronizedState.expBar;
-  const getCharacterEqStatus = () => synchronizedState.eqStatus;
+
+  const getCharacterEqStatus = () => {
+    // TODO: uwzględnić jeszcze modyfikatory z eq
+    const characterEffects = getCharacterEffects();
+
+    if (characterEffects) {
+      var calculatedStatus = { ...synchronizedState.eqStatus };
+
+      characterEffects.forEach((effect) => {
+        if (effect.baseModifiers) {
+          calculatedStatus = {
+            ...calculatedStatus,
+            atkPoints: calculatedStatus.atkPoints + effect.baseModifiers.atk,
+            defPoints: calculatedStatus.defPoints + effect.baseModifiers.def,
+          };
+        }
+      });
+
+      return {
+        ...calculatedStatus,
+        defDebuffStatus: determineDebuffStatus(
+          synchronizedState.eqStatus.defPoints,
+          calculatedStatus.defPoints
+        ),
+        atkDebuffStatus: determineDebuffStatus(
+          synchronizedState.eqStatus.atkPoints,
+          calculatedStatus.atkPoints
+        ),
+      };
+    } else return synchronizedState.eqStatus;
+  };
 
   const getCharacterBaseStatus = () => {
     // TODO: uwzględnić jeszcze modyfikatory z eq
