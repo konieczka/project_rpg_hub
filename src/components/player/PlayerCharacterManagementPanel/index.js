@@ -15,7 +15,6 @@ import {
 } from "./styles";
 import { DoubleColumnLayout } from "components/shared/CharacterCard/styles";
 import { Button } from "components/shared/Button";
-import { useForceUpdate } from "hooks/useForceUpdate";
 
 const initialChangeState = {
   pointsLeft: 0,
@@ -30,8 +29,6 @@ const PlayerCharacterManagementPanel = () => {
   const [skillsChange, setSkillsChange] = useState(initialChangeState);
 
   const { colors } = useSystemTheme();
-
-  const forceUpdate = useForceUpdate();
 
   useEffect(() => {
     if (activeCharacterApi.characterMounted && !attrsChange.initialized) {
@@ -64,10 +61,15 @@ const PlayerCharacterManagementPanel = () => {
                 .map((skill) => [skill.skillId, 0])
             ),
           }),
-        []
+        [150]
       );
     }
   }, [activeCharacterApi, attrsChange, skillsChange]);
+
+  const resetChanges = () => {
+    setAttrsChange(initialChangeState);
+    setSkillsChange(initialChangeState);
+  };
 
   if (!activeCharacterApi.characterMounted) {
     return null;
@@ -107,7 +109,14 @@ const PlayerCharacterManagementPanel = () => {
             <h4>Punkty rozwoju: {attrsChange.pointsLeft || "Brak"}</h4>
             <ul>
               {characterBaseAttrs.map(({ identifier, value }) => (
-                <li key={`character-management-${identifier}`}>
+                <li
+                  key={`character-management-${identifier}`}
+                  style={{
+                    width: "140px",
+                    textAlign: "right",
+                    marginLeft: "-24px",
+                  }}
+                >
                   {identifier} : {value}{" "}
                   {attrsChange.requestedChanges[identifier]
                     ? `=> ${attrsChange.requestedChanges[identifier] + value}`
@@ -136,12 +145,15 @@ const PlayerCharacterManagementPanel = () => {
           </Column>
         </Row>
         <Row>
-          <Column>
+          <Column style={{ marginTop: "32px" }}>
             <h4>Punkty umiejętności: {skillsChange.pointsLeft || "Brak"}</h4>
             <ul>
               {characterSkills.map((skill) => (
                 <li key={`${skill.skillId}-character-management`}>
-                  {skill.attrs.join("/")} {skill.name} : {skill.level}{" "}
+                  <b>
+                    {skill.attrs.join("/")} {skill.name}
+                  </b>
+                  : {skill.level}
                   {skillsChange.requestedChanges[skill.skillId]
                     ? `=> ${
                         skillsChange.requestedChanges[skill.skillId] +
@@ -175,7 +187,8 @@ const PlayerCharacterManagementPanel = () => {
               <ul>
                 {characterPerks.map((perk) => (
                   <li key={`${perk.id}-character-management`}>
-                    {perk.description}
+                    <b>{perk.name}</b>
+                    <br /> {perk.description}
                   </li>
                 ))}
               </ul>
@@ -185,17 +198,13 @@ const PlayerCharacterManagementPanel = () => {
           </Column>
         </Row>
         {((characterExpInfo.availableSkillPoints &&
+          skillsChange.initialized &&
           skillsChange.pointsLeft === 0) ||
           (characterExpInfo.availableAttrPoints &&
+            attrsChange.initialized &&
             attrsChange.pointsLeft === 0)) && (
           <LevelUpButtonsGroup>
-            <Button
-              onClick={() => {
-                setAttrsChange(initialChangeState);
-                setSkillsChange(initialChangeState);
-              }}
-              bgColor={colors.primary}
-            >
+            <Button onClick={() => resetChanges()} bgColor={colors.primary}>
               Resetuj
             </Button>
             <Button
@@ -205,9 +214,7 @@ const PlayerCharacterManagementPanel = () => {
                   skillsChange.requestedChanges,
                   attrsChange.requestedChanges
                 );
-                setAttrsChange(initialChangeState);
-                setSkillsChange(initialChangeState);
-                forceUpdate();
+                resetChanges();
               }}
             >
               Awansuj

@@ -31,6 +31,15 @@ export const Column = styled.div`
     font-size: 18px;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.7);
+    list-style-type: none;
+
+    li {
+      font-weight: 500;
+    }
+  }
+
+  b {
+    color: white;
   }
 `;
 

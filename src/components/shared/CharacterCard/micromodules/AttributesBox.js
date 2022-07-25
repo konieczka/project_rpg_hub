@@ -11,7 +11,6 @@ const AttributeComponent = ({ displayAttr, isSelectable, onSelect }) => {
   if (isSelectable) {
     return (
       <ClickableAttributeItem
-        key={`${displayAttr.identifier}-character-attribute`}
         onClick={() =>
           onSelect({ attrId: displayAttr.identifier, value: displayAttr.value })
         }
@@ -61,7 +60,7 @@ export const AttributesBox = ({ attrs, selectableAttrs, onAttrSelect }) => {
         })
         .map((displayAttr) => (
           <AttributeComponent
-            key={displayAttr.attrId}
+            key={`${displayAttr.identifier}-character-attribute`}
             displayAttr={displayAttr}
             isSelectable={selectableAttrs}
             onSelect={onAttrSelect}
