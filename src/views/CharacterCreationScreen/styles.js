@@ -17,11 +17,21 @@ export const FormContainer = styled.div`
   padding: 16px;
   display: flex;
   flex-flow: row nowrap;
+  justify-content: space-between;
+  margin-top: 32px;
+  height: 780px;
+  width: 1200px;
 `;
 
-export const BiographicalInfoBox = styled.div`
+export const FormColumn = styled.div`
   display: flex;
   flex-flow: column nowrap;
+  padding: 32px;
   gap: 16px;
 `;
 
+export const SelectedItemInfo = styled.div`
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 8px;
+`;
