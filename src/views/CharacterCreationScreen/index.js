@@ -1,7 +1,7 @@
 import { HeadingLarge } from "components/shared/Heading";
 import { LabeledInput, LabeledTextArea } from "components/shared/Input";
 import InteractiveList from "components/shared/InteractiveList";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import {
   convertRootObjectIntoList,
@@ -20,12 +20,16 @@ const SELECTABLE_TYPES = {
 };
 
 const CharacterCreationScreen = () => {
-  const { activeSystemMetadata, metadataSet } = useSelector(
+  const { activeSystem, activeSystemMetadata, metadataSet } = useSelector(
     (state) => state.gameSystems
   );
 
   const [selectedClassId, setSelectedClassId] = useState("");
   const [selectedTypeId, setSelectedTypeId] = useState("");
+
+  const [attrsAssignment, setAttrsAssignment] = useState(null);
+  const [classModifiers, setClassModifiers] = useState(null);
+  const [typeModifiers, setTypeModifiers] = useState(null);
 
   const mapClassesAndTypesToListData = () => [
     {
@@ -50,12 +54,47 @@ const CharacterCreationScreen = () => {
     },
   ];
 
-  if (!metadataSet) {
+  // Set initial attribute points assignment state
+  useEffect(() => {
+    if (!!activeSystem) {
+      const assignmentSchema = Object.fromEntries(
+        activeSystem.mechanics.attrsSchema.map(({ attrId }) => [attrId, 0])
+      );
+      setAttrsAssignment(assignmentSchema);
+      setClassModifiers(assignmentSchema);
+      setTypeModifiers(assignmentSchema);
+    }
+  }, [activeSystem]);
+
+  // Set base attributes upon class selection
+  useEffect(() => {
+    if (selectedClassId) {
+      setClassModifiers((prev) => ({
+        ...prev,
+        ...activeSystemMetadata.characterClasses.classes[selectedClassId]
+          .baseAttrs,
+      }));
+    }
+  }, [selectedClassId, activeSystemMetadata.characterClasses.classes]);
+
+  // Set base attributes upon type selection
+  useEffect(() => {
+    if (selectedTypeId) {
+      setTypeModifiers((prev) => ({
+        ...prev,
+        ...activeSystemMetadata.characterClasses.types[selectedTypeId]
+          .baseAttrs,
+      }));
+    }
+  }, [selectedTypeId, activeSystemMetadata.characterClasses.types]);
+
+  if (!metadataSet || !activeSystem) {
     return null;
   }
 
   const { classes, types, classDisplayName, typeDisplayName } =
     activeSystemMetadata.characterClasses;
+  const { mechanics } = activeSystem;
 
   return (
     <Container>
@@ -69,16 +108,18 @@ const CharacterCreationScreen = () => {
         </FormColumn>
         <FormColumn>
           <h2>Atrybuty początkowe</h2>
-          <InteractiveList
-            listData={mapClassesAndTypesToListData()}
-            onSelectItem={(secondLevelId, firstLevelId) => {
-              if (firstLevelId === SELECTABLE_TYPES.characterClass) {
-                setSelectedClassId(secondLevelId);
-              } else if (firstLevelId === SELECTABLE_TYPES.characterType) {
-                setSelectedTypeId(secondLevelId);
-              }
-            }}
-          />
+          <div style={{ minHeight: "150px" }}>
+            <InteractiveList
+              listData={mapClassesAndTypesToListData()}
+              onSelectItem={(secondLevelId, firstLevelId) => {
+                if (firstLevelId === SELECTABLE_TYPES.characterClass) {
+                  setSelectedClassId(secondLevelId);
+                } else if (firstLevelId === SELECTABLE_TYPES.characterType) {
+                  setSelectedTypeId(secondLevelId);
+                }
+              }}
+            />
+          </div>
           <SelectedItemInfo>
             <h3>
               Wybrana {classDisplayName}
@@ -93,12 +134,12 @@ const CharacterCreationScreen = () => {
                   {stringifyAttrs(classes[selectedClassId].baseAttrs)}
                 </p>
                 {classes[selectedClassId].baseSkills.length > 0 && (
-                  <p>
+                  <div>
                     <b>Umiejętności początkowe:</b>
                     <ul style={{ marginLeft: "15px" }}>
                       {classes[selectedClassId].baseSkills.map(
                         ({ skillId, level }) => (
-                          <li>
+                          <li key={skillId}>
                             {activeSystemMetadata.skills[skillId].attrs.join(
                               "/"
                             )}{" "}
@@ -107,7 +148,7 @@ const CharacterCreationScreen = () => {
                         )
                       )}
                     </ul>
-                  </p>
+                  </div>
                 )}
               </>
             )}
@@ -127,6 +168,21 @@ const CharacterCreationScreen = () => {
                 </p>
               </>
             )}
+          </SelectedItemInfo>
+          <SelectedItemInfo>
+            <ul>
+              {mechanics.attrsSchema.map((attr) => (
+                <li>
+                  <b>
+                    {attr.attrId} {attr.name}{" "}
+                    {attrsAssignment[attr.attrId] +
+                      classModifiers[attr.attrId] +
+                      typeModifiers[attr.attrId]}
+                  </b>
+                  <p>{attr.description}</p>
+                </li>
+              ))}
+            </ul>
           </SelectedItemInfo>
         </FormColumn>
         <FormColumn>
